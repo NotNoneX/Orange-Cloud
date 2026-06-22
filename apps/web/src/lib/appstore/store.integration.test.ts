@@ -2,7 +2,7 @@
 // INSERT OR IGNORE 幂等、ON CONFLICT upsert、以及 last_signed_date 乱序保护。
 // 用一个最小 D1 适配器把 store.ts 期望的 prepare/bind/batch 映射到 node:sqlite。
 
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { beforeEach, describe, expect, it } from "vitest";
 import { processNotification } from "./store";
@@ -45,11 +45,17 @@ class FakeD1 {
 let raw: DatabaseSync;
 let db: FakeD1;
 
-const schema = readFileSync(new URL("../../../migrations/0001_init.sql", import.meta.url), "utf8");
+// 应用全部 migration（含 0003 给 transactions 加的 offer_identifier / storefront），
+// 让集成测试的表结构与生产一致。
+const migDir = new URL("../../../migrations/", import.meta.url);
+const migrations = readdirSync(migDir)
+	.filter((f) => f.endsWith(".sql"))
+	.sort()
+	.map((f) => readFileSync(new URL(f, migDir), "utf8"));
 
 beforeEach(() => {
 	raw = new DatabaseSync(":memory:");
-	raw.exec(schema);
+	for (const m of migrations) raw.exec(m);
 	db = new FakeD1(raw);
 });
 

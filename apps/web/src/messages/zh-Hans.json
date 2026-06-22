@@ -1,4 +1,8 @@
 {
+	"rank": {
+		"badge": "开发者工具榜第 {rank} 名",
+		"ariaLabel": "App Store 排名"
+	},
 	"meta": {
 		"title": "Orange Cloud — 一眼看清你的 Cloudflare",
 		"description": "iOS 原生 Cloudflare 管理客户端：官方 OAuth 安全登录，域名、DNS、流量分析、Workers 实时日志与 R2 · D1 · KV 存储，尽在 iPhone 与 iPad。",

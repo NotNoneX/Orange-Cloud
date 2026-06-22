@@ -1,4 +1,8 @@
 {
+	"rank": {
+		"badge": "#{rank} en Herramientas para desarrolladores",
+		"ariaLabel": "Clasificación en la App Store"
+	},
 	"meta": {
 		"title": "Orange Cloud — Tu Cloudflare, de un vistazo",
 		"description": "Cliente nativo de Cloudflare para iOS: inicio de sesión con OAuth oficial, dominios, DNS, análisis de tráfico, registros en vivo de Workers y almacenamiento R2 · D1 · KV en iPhone y iPad.",

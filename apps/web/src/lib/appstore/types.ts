@@ -62,6 +62,8 @@ export interface TransactionInfo {
 	isUpgraded?: boolean;
 	price?: number; // 货币 milliunits（$19.99 -> 19990）
 	currency?: string; // ISO 4217
+	storefront?: string; // App Store 商店地区，ISO 3166-1 alpha-3（如 USA / CHN）
+	storefrontId?: string; // Apple 数字 storefront id
 	appAccountToken?: string;
 	[key: string]: unknown;
 }

@@ -5,7 +5,9 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "orange-cloud-web",
-	"main": ".open-next/worker.js",
+	// 入口指向 custom-worker.ts（包一层 .open-next/worker.js + 补 scheduled），
+	// 让每日榜单抓取的 cron 有处理器可调。见 custom-worker.ts 顶部说明。
+	"main": "custom-worker.ts",
 	"compatibility_date": "2026-06-01",
 	"compatibility_flags": [
 		"nodejs_compat",
@@ -43,6 +45,10 @@
 	],
 	"observability": {
 		"enabled": true
+	},
+	// 每天 UTC 08:00 触发 custom-worker.ts 的 scheduled()，抓 App Store 各地区榜单名次。
+	"triggers": {
+		"crons": ["0 8 * * *"]
 	},
 	"routes": [
 		{

@@ -1,4 +1,8 @@
 {
+	"rank": {
+		"badge": "デベロッパツール {rank} 位",
+		"ariaLabel": "App Store ランキング"
+	},
 	"meta": {
 		"title": "Orange Cloud — Cloudflare を、ひと目で",
 		"description": "Cloudflare のための iOS ネイティブクライアント。公式 OAuth ログイン、ドメイン・DNS・トラフィック分析・Workers ライブログ・R2 / D1 / KV ストレージを iPhone と iPad で。",

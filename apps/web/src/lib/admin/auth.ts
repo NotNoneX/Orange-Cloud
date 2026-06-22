@@ -50,7 +50,7 @@ export async function createSessionToken(secret: string): Promise<string> {
 	return `${payload}.${sig}`;
 }
 
-async function verifySessionToken(token: string, secret: string): Promise<boolean> {
+export async function verifySessionToken(token: string, secret: string): Promise<boolean> {
 	if (!secret) return false;
 	const dot = token.indexOf(".");
 	if (dot <= 0) return false;

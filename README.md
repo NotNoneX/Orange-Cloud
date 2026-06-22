@@ -8,7 +8,9 @@
 
 <a href="https://apps.apple.com/app/id6779323783"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download Orange Cloud on the App Store" height="54" /></a>
 &nbsp;
-<a href="https://www.producthunt.com/products/orange-cloud?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-orange-cloud" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1173673&amp;theme=light&amp;t=1781641886373" alt="Orange Cloud - The open-source Cloudflare companion for power users | Product Hunt" height="54" /></a>
+<a href="https://www.producthunt.com/products/orange-cloud?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-orange-cloud" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1173673&amp;theme=dark&amp;t=1781641886373" alt="Orange Cloud - The open-source Cloudflare companion for power users | Product Hunt" height="54" /></a>
+
+<a href="https://apps.apple.com/app/id6779323783"><img src="https://orange-cloud.chatiro.app/api/ranks/badge" alt="Orange Cloud App Store rank" height="20" /></a>
 
 [Website](https://orange-cloud.chatiro.app) · [Privacy](https://orange-cloud.chatiro.app/privacy) · [Terms](https://orange-cloud.chatiro.app/terms) · [TestFlight (beta)](https://testflight.apple.com/join/ZGhbsphj) · [Telegram](https://t.me/orange_cloud_channel)
 

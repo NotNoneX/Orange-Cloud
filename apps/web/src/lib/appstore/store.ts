@@ -60,13 +60,15 @@ export async function processNotification(
 					`INSERT INTO transactions
 					 (transaction_id, original_transaction_id, product_id, type, purchase_date,
 					  expires_date, price_millis, currency, in_app_ownership_type, offer_type,
-					  revocation_date, revocation_reason, environment, notification_type,
-					  notification_subtype, signed_date, created_at, updated_at)
-					 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+					  offer_identifier, storefront, revocation_date, revocation_reason, environment,
+					  notification_type, notification_subtype, signed_date, created_at, updated_at)
+					 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 					 ON CONFLICT(transaction_id) DO UPDATE SET
 					   expires_date = COALESCE(excluded.expires_date, transactions.expires_date),
 					   price_millis = COALESCE(excluded.price_millis, transactions.price_millis),
 					   currency = COALESCE(excluded.currency, transactions.currency),
+					   offer_identifier = COALESCE(excluded.offer_identifier, transactions.offer_identifier),
+					   storefront = COALESCE(excluded.storefront, transactions.storefront),
 					   revocation_date = COALESCE(excluded.revocation_date, transactions.revocation_date),
 					   revocation_reason = COALESCE(excluded.revocation_reason, transactions.revocation_reason),
 					   notification_type = excluded.notification_type,
@@ -85,6 +87,8 @@ export async function processNotification(
 					transaction.currency ?? null,
 					transaction.inAppOwnershipType ?? null,
 					transaction.offerType ?? null,
+					transaction.offerIdentifier ?? null,
+					transaction.storefront ?? null,
 					transaction.revocationDate ?? null,
 					transaction.revocationReason ?? null,
 					transaction.environment ?? null,

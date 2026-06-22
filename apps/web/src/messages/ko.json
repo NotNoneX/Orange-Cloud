@@ -1,4 +1,8 @@
 {
+	"rank": {
+		"badge": "개발자 도구 {rank}위",
+		"ariaLabel": "App Store 순위"
+	},
 	"meta": {
 		"title": "Orange Cloud — Cloudflare를 한눈에",
 		"description": "iPhone과 iPad를 위한 네이티브 Cloudflare 클라이언트. 공식 OAuth 로그인, 도메인·DNS·트래픽 분석·Workers 실시간 로그와 R2·D1·KV 스토리지를 한 손에.",

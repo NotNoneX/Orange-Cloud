@@ -4,6 +4,7 @@ import { shotLocale } from "@/i18n/routing";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import AppStoreBadge, { TESTFLIGHT_URL, APP_STORE_COMING } from "@/components/AppStoreBadge";
+import HomeRankBadge from "@/components/HomeRankBadge";
 import ProductHuntBadge from "@/components/ProductHuntBadge";
 import PhoneDemo, { type PhoneStrings } from "@/components/PhoneDemo";
 import HorizonArc from "@/components/HorizonArc";
@@ -103,6 +104,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 									<span className="text-[13px] t-tertiary">{t("hero.note")}</span>
 								</div>
 							</Reveal>
+							{/* 按访客 IP 所在地区展示当前 App Store 排名（未上榜/非追踪地区不渲染）。 */}
+							<HomeRankBadge
+								className="mt-5"
+								locale={locale}
+								badgeTemplate={t.raw("rank.badge")}
+								ariaLabel={t("rank.ariaLabel")}
+							/>
 							<Reveal index={4}>
 								<HorizonArc className="mt-10 max-w-[520px]" />
 							</Reveal>
