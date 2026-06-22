@@ -10,6 +10,18 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "1.3.2", items: [
+            WhatsNewItem(
+                icon:   "sparkles",
+                title:  String(localized: "用自然语言写 WAF 规则", table: "WhatsNew"),
+                detail: String(localized: "在支持 Apple 智能的设备上，用一句话描述需求即可生成 WAF 自定义规则，也能把现有规则翻译成大白话；全程在设备上离线完成。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "wrench.and.screwdriver",
+                title:  String(localized: "修复启动闪退", table: "WhatsNew"),
+                detail: String(localized: "修复了 App 在部分 iOS 17 设备上一启动就闪退的问题。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.3.0", items: [
             WhatsNewItem(
                 icon:   "globe.badge.chevron.right",

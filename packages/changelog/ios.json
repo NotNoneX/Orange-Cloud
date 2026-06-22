@@ -1,5 +1,63 @@
 [
   {
+    "version": "1.3.2",
+    "date": "2026.06.22",
+    "channel": "App Store",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "sparkles",
+        "title": {
+          "zh-Hans": "用自然语言写 WAF 规则",
+          "en": "WAF Rules in Plain Language",
+          "zh-Hant": "用自然語言寫 WAF 規則",
+          "zh-HK": "用自然語言寫 WAF 規則",
+          "ja": "自然な言葉で WAF ルールを作成",
+          "es-MX": "Reglas de WAF en lenguaje natural",
+          "ko": "자연어로 WAF 규칙 작성",
+          "pt-BR": "Regras de WAF em linguagem natural",
+          "pt-PT": "Regras de WAF em linguagem natural"
+        },
+        "detail": {
+          "zh-Hans": "在支持 Apple 智能的设备上，用一句话描述需求即可生成 WAF 自定义规则，也能把现有规则翻译成大白话；全程在设备上离线完成。",
+          "en": "On devices with Apple Intelligence, describe what you want in a sentence to generate a WAF custom rule — and translate existing rules into plain words. Runs entirely on-device, offline.",
+          "zh-Hant": "在支援 Apple 智慧的裝置上，用一句話描述需求即可生成 WAF 自訂規則，也能把現有規則翻譯成白話；全程在裝置上離線完成。",
+          "zh-HK": "在支援 Apple 智能的裝置上，用一句話描述需求即可生成 WAF 自訂規則，也能把現有規則翻譯成白話；全程在裝置上離線完成。",
+          "ja": "Apple Intelligence に対応したデバイスでは、やりたいことを一文で書くだけで WAF カスタムルールを生成でき、既存のルールをわかりやすい言葉に翻訳することもできます。すべてデバイス上でオフライン処理。",
+          "es-MX": "En dispositivos con Apple Intelligence, describe lo que necesitas en una frase para generar una regla personalizada de WAF; también traduce reglas existentes a lenguaje sencillo. Todo en el dispositivo y sin conexión.",
+          "ko": "Apple Intelligence를 지원하는 기기에서 한 문장으로 설명하면 WAF 사용자 지정 규칙을 생성하고, 기존 규칙을 쉬운 말로 풀어 줍니다. 모든 처리는 기기에서 오프라인으로 이뤄집니다.",
+          "pt-BR": "Em dispositivos com a Apple Intelligence, descreva o que precisa em uma frase para gerar uma regra personalizada do WAF — e traduza regras existentes para uma linguagem simples. Tudo no dispositivo e off-line.",
+          "pt-PT": "Em dispositivos com a Apple Intelligence, descreva o que precisa numa frase para gerar uma regra personalizada do WAF — e traduza regras existentes para linguagem simples. Tudo no dispositivo e offline."
+        }
+      },
+      {
+        "icon": "wrench.and.screwdriver",
+        "title": {
+          "zh-Hans": "修复启动闪退",
+          "en": "Launch Crash Fix",
+          "zh-Hant": "修復啟動閃退",
+          "zh-HK": "修復啟動閃退",
+          "ja": "起動時のクラッシュを修正",
+          "es-MX": "Corrección de cierre al iniciar",
+          "ko": "실행 시 충돌 수정",
+          "pt-BR": "Correção de falha ao abrir",
+          "pt-PT": "Correção de falha ao abrir"
+        },
+        "detail": {
+          "zh-Hans": "修复了 App 在部分 iOS 17 设备上一启动就闪退的问题。",
+          "en": "Fixed an issue where the app could crash on launch on some iOS 17 devices.",
+          "zh-Hant": "修復了 App 在部分 iOS 17 裝置上一啟動就閃退的問題。",
+          "zh-HK": "修復了 App 在部分 iOS 17 裝置上一啟動就閃退的問題。",
+          "ja": "一部の iOS 17 デバイスで、起動直後にアプリが終了することがある問題を修正しました。",
+          "es-MX": "Se corrigió un problema por el que la app podía cerrarse al iniciar en algunos dispositivos con iOS 17.",
+          "ko": "일부 iOS 17 기기에서 앱을 실행하자마자 종료되던 문제를 수정했습니다.",
+          "pt-BR": "Corrigimos um problema em que o app podia fechar ao abrir em alguns dispositivos com iOS 17.",
+          "pt-PT": "Corrigimos um problema em que a app podia fechar ao abrir em alguns dispositivos com iOS 17."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.3.1",
     "date": "2026.06.21",
     "channel": "App Store",

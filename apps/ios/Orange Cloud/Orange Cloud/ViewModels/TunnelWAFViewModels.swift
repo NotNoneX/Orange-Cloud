@@ -279,6 +279,26 @@ final class WAFRulesViewModel {
         togglingRuleId = nil
     }
 
+    // MARK: - 设备端 AI 生成（自然语言 → 结构化 → 表达式）
+
+    var isGenerating = false
+    var generationError: String?
+
+    /// 用自然语言生成一条规则草稿；失败时写入 generationError 并返回 nil。
+    func generate(from naturalLanguage: String, locale: Locale = .current) async -> GeneratedWAFRule? {
+        let trimmed = naturalLanguage.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, !isGenerating else { return nil }
+        isGenerating = true
+        generationError = nil
+        defer { isGenerating = false }
+        do {
+            return try await WAFAssistant.generateRule(from: trimmed, locale: locale)
+        } catch {
+            generationError = error.localizedDescription
+            return nil
+        }
+    }
+
     /// 新建规则：已有规则集则追加，否则创建 entrypoint。成功返回 true。
     var isSaving = false
 
