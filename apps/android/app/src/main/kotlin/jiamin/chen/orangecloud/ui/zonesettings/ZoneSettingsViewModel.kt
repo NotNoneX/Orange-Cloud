@@ -115,4 +115,24 @@ class ZoneSettingsViewModel @Inject constructor(
             }
         }
     }
+
+    /** 按 URL 清理缓存。调用方负责拆行/校验，这里只下发（单次最多 30 个）。 */
+    fun purgeFiles(urls: List<String>) {
+        if (!canPurge || urls.isEmpty()) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isPurging = true) }
+            try {
+                repository.purgeFiles(zoneId, urls.take(MAX_PURGE_URLS))
+                eventChannel.send(ZoneSettingsEvent.Purged)
+            } catch (e: Exception) {
+                eventChannel.send(ZoneSettingsEvent.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(isPurging = false) }
+            }
+        }
+    }
+
+    companion object {
+        const val MAX_PURGE_URLS = 30
+    }
 }

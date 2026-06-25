@@ -1,6 +1,7 @@
 package jiamin.chen.orangecloud.data.repository
 
 import jiamin.chen.orangecloud.core.network.CfApiClient
+import jiamin.chen.orangecloud.data.model.PurgeFilesRequest
 import jiamin.chen.orangecloud.data.model.PurgeRequest
 import jiamin.chen.orangecloud.data.model.PurgeResult
 import jiamin.chen.orangecloud.data.model.ZoneSetting
@@ -23,5 +24,10 @@ class ZoneSettingsRepository @Inject constructor(
 
     suspend fun purgeAllCache(zoneId: String) {
         api.post<PurgeResult, PurgeRequest>("zones/$zoneId/purge_cache", PurgeRequest(purgeEverything = true))
+    }
+
+    /** 按 URL 清理缓存（单文件 purge，单次最多 30 个 URL）。 */
+    suspend fun purgeFiles(zoneId: String, urls: List<String>) {
+        api.post<PurgeResult, PurgeFilesRequest>("zones/$zoneId/purge_cache", PurgeFilesRequest(files = urls))
     }
 }

@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jiamin.chen.orangecloud.core.purchase.BillingGateway
 import jiamin.chen.orangecloud.core.purchase.EntitlementStore
+import jiamin.chen.orangecloud.core.purchase.RedeemOutcome
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -113,6 +114,9 @@ class PlayBillingGateway @Inject constructor(
             )
         }
     }
+
+    override suspend fun redeem(code: String) = RedeemOutcome.NOT_SUPPORTED
+    override suspend fun deactivate() = false
 }
 
 @Module

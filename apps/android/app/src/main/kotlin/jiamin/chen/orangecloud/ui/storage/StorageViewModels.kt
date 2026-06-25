@@ -11,6 +11,7 @@ import jiamin.chen.orangecloud.data.model.D1QueryResult
 import jiamin.chen.orangecloud.data.model.KVKey
 import jiamin.chen.orangecloud.data.model.KVNamespace
 import jiamin.chen.orangecloud.data.model.R2Bucket
+import jiamin.chen.orangecloud.data.model.R2Folder
 import jiamin.chen.orangecloud.data.model.R2Object
 import jiamin.chen.orangecloud.data.model.D1Column
 import jiamin.chen.orangecloud.data.repository.AccountStore
@@ -131,15 +132,24 @@ class KVNamespaceListViewModel @Inject constructor(
 sealed interface R2Event {
     data object Uploaded : R2Event
     data object Deleted : R2Event
+    data object Copied : R2Event
+    data object Moved : R2Event
+    data object MoveVerifyFailed : R2Event
     data class Error(val message: String?) : R2Event
 }
 
 data class R2ObjectUiState(
     val objects: List<R2Object> = emptyList(),
+    /** 当前所在「文件夹」前缀（空 = 根）。 */
+    val prefix: String = "",
+    /** 当前层折叠出的子文件夹。 */
+    val folders: List<R2Folder> = emptyList(),
     val isLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val isUploading: Boolean = false,
     val isDownloading: Boolean = false,
+    val isCopying: Boolean = false,
+    val copyProgress: Float = 0f,
     val hasError: Boolean = false,
     val missingScope: Boolean = false,
     val hasMore: Boolean = false,
@@ -158,6 +168,8 @@ class R2ObjectListViewModel @Inject constructor(
     private val hasScope = authRepository.hasScope(Scopes.R2_READ)
     private val canWrite = authRepository.hasScope(Scopes.R2_WRITE)
     private var cursor: String? = null
+    /** 当前所在文件夹前缀（空 = 根）。 */
+    private var prefix: String = ""
 
     private val _uiState = MutableStateFlow(
         R2ObjectUiState(isLoading = hasScope, missingScope = !hasScope, canWrite = canWrite),
@@ -175,10 +187,23 @@ class R2ObjectListViewModel @Inject constructor(
         if (!hasScope) return
         cursor = null
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, hasError = false, objects = emptyList()) }
+            _uiState.update { it.copy(isLoading = true, hasError = false, objects = emptyList(), folders = emptyList(), prefix = prefix) }
             fetchPage(reset = true)
             _uiState.update { it.copy(isLoading = false) }
         }
+    }
+
+    /** 进入子文件夹。 */
+    fun navigateInto(folder: R2Folder) {
+        prefix = folder.prefix
+        loadFirst()
+    }
+
+    /** 返回上一层文件夹。已在根则忽略。 */
+    fun navigateUp() {
+        if (prefix.isEmpty()) return
+        prefix = R2Folder.parentOf(prefix)
+        loadFirst()
     }
 
     fun loadMore() {
@@ -197,10 +222,15 @@ class R2ObjectListViewModel @Inject constructor(
                 _uiState.update { it.copy(hasError = true) }
                 return
             }
-            val (objects, next) = storageRepository.listObjects(accountId, bucket, cursor)
-            cursor = next
+            val page = storageRepository.listObjects(accountId, bucket, prefix, cursor)
+            cursor = page.nextCursor
+            val folders = R2Folder.makeList(page.folderPrefixes, prefix)
             _uiState.update {
-                it.copy(objects = if (reset) objects else it.objects + objects, hasMore = next != null)
+                it.copy(
+                    objects = if (reset) page.objects else it.objects + page.objects,
+                    folders = if (reset) folders else it.folders,
+                    hasMore = page.nextCursor != null,
+                )
             }
         } catch (e: Exception) {
             _uiState.update { it.copy(hasError = true) }
@@ -228,7 +258,8 @@ class R2ObjectListViewModel @Inject constructor(
             _uiState.update { it.copy(isUploading = true) }
             try {
                 val accountId = accountStore.selectedAccountId.value ?: error("no account")
-                storageRepository.putObject(accountId, bucket, filename, bytes, contentType)
+                // 上传进当前文件夹（前缀 + 文件名）
+                storageRepository.putObject(accountId, bucket, prefix + filename, bytes, contentType)
                 eventChannel.send(R2Event.Uploaded)
                 loadFirst()
             } catch (e: Exception) {
@@ -249,6 +280,38 @@ class R2ObjectListViewModel @Inject constructor(
                 eventChannel.send(R2Event.Deleted)
             } catch (e: Exception) {
                 eventChannel.send(R2Event.Error(e.message))
+            }
+        }
+    }
+
+    /**
+     * 复制（isMove=false）/ 移动（isMove=true）对象到新 key（同桶，流式过临时文件）。
+     * 移动 = 复制 → 校验目标已写入 → 删源；校验不过绝不删源，避免半路失败丢数据。
+     */
+    fun copyOrMove(sourceKey: String, destKey: String, contentType: String, isMove: Boolean) {
+        if (!canWrite || destKey.isBlank() || destKey == sourceKey || _uiState.value.isCopying) return
+        viewModelScope.launch {
+            val accountId = accountStore.selectedAccountId.value ?: return@launch
+            _uiState.update { it.copy(isCopying = true, copyProgress = 0f) }
+            try {
+                storageRepository.copyObject(accountId, bucket, sourceKey, destKey, contentType) { p ->
+                    _uiState.update { it.copy(copyProgress = p) }
+                }
+                if (isMove) {
+                    if (!storageRepository.objectExists(accountId, bucket, destKey)) {
+                        eventChannel.send(R2Event.MoveVerifyFailed)
+                        return@launch
+                    }
+                    storageRepository.deleteObject(accountId, bucket, sourceKey)
+                    eventChannel.send(R2Event.Moved)
+                } else {
+                    eventChannel.send(R2Event.Copied)
+                }
+                loadFirst()
+            } catch (e: Exception) {
+                eventChannel.send(R2Event.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(isCopying = false) }
             }
         }
     }

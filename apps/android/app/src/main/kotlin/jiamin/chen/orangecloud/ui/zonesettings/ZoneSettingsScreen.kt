@@ -17,7 +17,9 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -35,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,6 +60,7 @@ fun ZoneSettingsScreen(
     val onSky = phase.onSky
     val snackbarHostState = remember { SnackbarHostState() }
     var confirmPurge by remember { mutableStateOf(false) }
+    var purgeUrlOpen by remember { mutableStateOf(false) }
     val purgedMsg = stringResource(R.string.zs_purged)
     val genericErr = stringResource(R.string.error_generic)
 
@@ -117,6 +122,13 @@ fun ZoneSettingsScreen(
                                 }
                                 Text(stringResource(R.string.zs_purge))
                             }
+                            OutlinedButton(
+                                onClick = { purgeUrlOpen = true },
+                                enabled = !state.isPurging,
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text(stringResource(R.string.zs_purge_url))
+                            }
                         }
                     }
                 }
@@ -138,6 +150,68 @@ fun ZoneSettingsScreen(
             dismissButton = { TextButton(onClick = { confirmPurge = false }) { Text(stringResource(R.string.dns_cancel)) } },
         )
     }
+
+    if (purgeUrlOpen) {
+        PurgeByUrlDialog(
+            zoneName = state.zoneName,
+            onDismiss = { purgeUrlOpen = false },
+            onPurge = { urls -> purgeUrlOpen = false; viewModel.purgeFiles(urls) },
+        )
+    }
+}
+
+@Composable
+private fun PurgeByUrlDialog(
+    zoneName: String,
+    onDismiss: () -> Unit,
+    onPurge: (List<String>) -> Unit,
+) {
+    var text by remember { mutableStateOf("") }
+    val urls = remember(text) {
+        text.split('\n').map { it.trim() }.filter { it.isNotEmpty() }
+    }
+    val overLimit = urls.size > ZoneSettingsViewModel.MAX_PURGE_URLS
+    val valid = urls.isNotEmpty() && !overLimit &&
+        urls.all { it.startsWith("http://") || it.startsWith("https://") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.zs_purge_url)) },
+        text = {
+            Column {
+                Text(
+                    stringResource(R.string.zs_purge_url_hint, ZoneSettingsViewModel.MAX_PURGE_URLS, zoneName),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.size(8.dp))
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 4,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Uri,
+                        autoCorrectEnabled = false,
+                        capitalization = KeyboardCapitalization.None,
+                    ),
+                )
+                if (urls.isNotEmpty()) {
+                    Text(
+                        "${urls.size} / ${ZoneSettingsViewModel.MAX_PURGE_URLS}",
+                        fontSize = 12.sp,
+                        color = if (overLimit) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onPurge(urls) }, enabled = valid) {
+                Text(stringResource(R.string.zs_purge))
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dns_cancel)) } },
+    )
 }
 
 @Composable

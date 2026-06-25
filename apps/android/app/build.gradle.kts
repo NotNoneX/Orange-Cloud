@@ -36,10 +36,12 @@ android {
 
     defaultConfig {
         applicationId = "jiamin.chen.orangecloud"
-        minSdk = 31
+        // 基线 Android 9（API 28）覆盖 ~97% 设备；Material You 动态取色(API31)/AGSL(API33)/
+        // 实况通知促升(API36) 均 if-guard 渐进增强，Android 9–11 落固定品牌调色板与常驻通知回退。
+        minSdk = 28
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 4
+        versionName = "1.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // OAuth 回调（Web 后端 302 跳回的自定义 scheme）
@@ -52,6 +54,7 @@ android {
         create("play") {
             dimension = "distribution"
             buildConfigField("boolean", "IS_OSS", "false")
+            buildConfigField("boolean", "IS_DIRECT", "false")
             buildConfigField("String", "OAUTH_CLIENT_ID", "\"${oauthClientId(officialOAuthClientId)}\"")
         }
         create("oss") {
@@ -59,8 +62,19 @@ android {
             applicationIdSuffix = ".oss"
             versionNameSuffix = "-oss"
             buildConfigField("boolean", "IS_OSS", "true")
+            buildConfigField("boolean", "IS_DIRECT", "false")
             // oss 默认不带官方 Client；自编译者用 local.properties 填
             buildConfigField("String", "OAUTH_CLIENT_ID", "\"${oauthClientId("")}\"")
+        }
+        // direct：非 Play 中国大陆直发渠道。无 Billing，Pro 走激活码兑换（Web 售卖 + /api/redeem）。
+        // 官方构建，用官方 OAuth Client；独立 applicationId 后缀以与 Play 版共存。
+        create("direct") {
+            dimension = "distribution"
+            applicationIdSuffix = ".direct"
+            versionNameSuffix = "-direct"
+            buildConfigField("boolean", "IS_OSS", "false")
+            buildConfigField("boolean", "IS_DIRECT", "true")
+            buildConfigField("String", "OAUTH_CLIENT_ID", "\"${oauthClientId(officialOAuthClientId)}\"")
         }
     }
 
@@ -154,6 +168,7 @@ dependencies {
     "playImplementation"(libs.billing.ktx)        // Play Billing 仅 play 风味
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.glance.appwidget)   // 桌面小组件（Glance）
 
     // 测试
     testImplementation(libs.junit)

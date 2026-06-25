@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jiamin.chen.orangecloud.core.purchase.BillingGateway
+import jiamin.chen.orangecloud.core.purchase.RedeemOutcome
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,6 +15,8 @@ import javax.inject.Singleton
 class OssBillingGateway @Inject constructor() : BillingGateway {
     override fun connect() = Unit
     override fun launchPurchase(activity: Activity, planId: String) = Unit
+    override suspend fun redeem(code: String) = RedeemOutcome.NOT_SUPPORTED
+    override suspend fun deactivate() = false
 }
 
 @Module

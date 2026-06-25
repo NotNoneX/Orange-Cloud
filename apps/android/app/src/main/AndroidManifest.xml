@@ -73,5 +73,17 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <!-- 晨昏桌面小组件（Glance）：账号总览天窗卡 -->
+        <receiver
+            android:name=".core.widget.OrangeCloudWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/orange_cloud_widget_info" />
+        </receiver>
     </application>
 </manifest>

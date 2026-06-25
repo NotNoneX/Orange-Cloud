@@ -16,11 +16,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Dns
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.automirrored.outlined.ShowChart
+import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -61,6 +66,11 @@ fun ZoneDetailScreen(
     onOpenAnalytics: () -> Unit,
     onOpenWaf: () -> Unit,
     onOpenSnippets: () -> Unit,
+    onOpenSsl: () -> Unit,
+    onOpenSslCerts: () -> Unit,
+    onOpenTransform: () -> Unit,
+    onOpenAccessRules: () -> Unit,
+    onOpenPerformance: () -> Unit,
     onOpenSettings: () -> Unit,
     viewModel: ZoneDetailViewModel = hiltViewModel(),
 ) {
@@ -93,6 +103,11 @@ fun ZoneDetailScreen(
                 ToolRow(Icons.Outlined.Dns, stringResource(R.string.zone_tool_dns), onOpenDns)
                 ToolRow(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.zone_tool_analytics), onOpenAnalytics)
                 ToolRow(Icons.Outlined.Shield, stringResource(R.string.zone_tool_waf), onOpenWaf)
+                ToolRow(Icons.Outlined.Lock, stringResource(R.string.zone_tool_ssl), onOpenSsl)
+                ToolRow(Icons.Outlined.VerifiedUser, stringResource(R.string.zone_tool_ssl_certs), onOpenSslCerts)
+                ToolRow(Icons.Outlined.SwapHoriz, stringResource(R.string.zone_tool_transform), onOpenTransform)
+                ToolRow(Icons.Outlined.Block, stringResource(R.string.zone_tool_ip_rules), onOpenAccessRules)
+                ToolRow(Icons.Outlined.Speed, stringResource(R.string.zone_tool_performance), onOpenPerformance)
                 ToolRow(Icons.Outlined.Code, stringResource(R.string.zone_tool_snippets), onOpenSnippets)
                 ToolRow(Icons.Outlined.Tune, stringResource(R.string.zone_tool_settings), onOpenSettings)
 

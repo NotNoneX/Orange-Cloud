@@ -52,6 +52,12 @@
     <string name="perm_waf_desc">查看与启停防火墙规则</string>
     <string name="perm_zone_settings">域名设置</string>
     <string name="perm_zone_settings_desc">开发模式 · 安全级别 · 清缓存</string>
+    <string name="perm_ssl_certs">SSL 证书</string>
+    <string name="perm_ssl_certs_desc">查看证书、开关 Universal SSL、删除高级证书</string>
+    <string name="perm_transform">Transform Rules</string>
+    <string name="perm_transform_desc">查看与编辑 URL 重写、请求/响应头规则</string>
+    <string name="perm_ip_rules">IP 访问规则</string>
+    <string name="perm_ip_rules_desc">查看与管理 IP / ASN / 国家或地区访问规则</string>
     <string name="perm_analytics">流量分析</string>
     <string name="perm_analytics_desc">查看流量与用量统计</string>
 
@@ -84,6 +90,30 @@
     <string name="r2_uploaded">已上传</string>
     <string name="r2_deleted">已删除</string>
     <string name="r2_delete">删除对象</string>
+    <string name="r2_folder">文件夹</string>
+    <string name="r2_folder_up">返回上一层</string>
+    <string name="r2_copy_move">复制 / 移动</string>
+    <string name="r2_dest_key">目标 key（含路径）</string>
+    <string name="r2_copy">复制</string>
+    <string name="r2_move">移动</string>
+    <string name="r2_copied">已复制</string>
+    <string name="r2_moved">已移动</string>
+    <string name="r2_move_verify_fail">复制后未确认目标对象，已保留原对象未删除</string>
+    <string name="r2_bucket_settings">桶设置</string>
+    <string name="r2_public_access">公开访问 (r2.dev)</string>
+    <string name="r2_public_access_desc">启用后可经 r2.dev 子域公开下载桶内对象。</string>
+    <string name="r2_custom_domains">自定义域</string>
+    <string name="r2_custom_domains_empty">未连接自定义域</string>
+    <string name="r2_cors">CORS 策略</string>
+    <string name="r2_cors_empty">未设置 CORS 规则</string>
+    <string name="r2_cors_rule_origins">来源：%1$s</string>
+    <string name="r2_cors_rule_methods">方法：%1$s</string>
+    <string name="r2_cors_clear">清除 CORS 策略</string>
+    <string name="r2_cors_cleared">已清除 CORS 策略</string>
+    <string name="r2_domain_removed">已断开自定义域</string>
+    <string name="r2_usage">本月用量</string>
+    <string name="r2_usage_storage">存储 %1$s</string>
+    <string name="r2_usage_requests">请求 %1$d（A %2$d · B %3$d）</string>
     <string name="r2_download_open">下载并打开</string>
     <string name="r2_no_app">没有可打开此文件的应用</string>
     <string name="r2_meta_size">大小</string>
@@ -204,6 +234,11 @@
     <string name="zone_tool_dns">DNS 记录</string>
     <string name="zone_tool_analytics">流量分析</string>
     <string name="zone_tool_waf">WAF 规则</string>
+    <string name="zone_tool_ssl">SSL/TLS</string>
+    <string name="zone_tool_ssl_certs">SSL 证书</string>
+    <string name="zone_tool_performance">性能与缓存</string>
+    <string name="zone_tool_transform">Transform Rules</string>
+    <string name="zone_tool_ip_rules">IP 访问规则</string>
     <string name="zone_tool_snippets">Snippets</string>
     <string name="zone_tool_settings">设置</string>
 
@@ -217,6 +252,113 @@
     <string name="zs_purged">已清空缓存</string>
     <string name="zs_purge_confirm_title">清空全部缓存？</string>
     <string name="zs_purge_confirm_msg">将清除该域名在 Cloudflare 边缘的全部缓存，可能短时增加源站负载。</string>
+    <string name="zs_purge_url">按 URL 清缓存</string>
+    <string name="zs_purge_url_hint">每行一个完整 URL，单次最多 %1$d 个。例如 https://%2$s/style.css</string>
+
+    <!-- 域名安全 · SSL/TLS 加密设置 -->
+    <string name="ssl_title">SSL/TLS</string>
+    <string name="ssl_mode">加密模式</string>
+    <string name="ssl_mode_off">关闭</string>
+    <string name="ssl_mode_off_blurb">不加密访客与 Cloudflare 之间的连接。</string>
+    <string name="ssl_mode_flexible">灵活</string>
+    <string name="ssl_mode_flexible_blurb">访客到 Cloudflare 加密，Cloudflare 到源站不加密。</string>
+    <string name="ssl_mode_full">完全</string>
+    <string name="ssl_mode_full_blurb">全程加密，但不校验源站证书。</string>
+    <string name="ssl_mode_strict">完全（严格）</string>
+    <string name="ssl_mode_strict_blurb">全程加密并校验源站证书，最安全。</string>
+    <string name="ssl_always_https">始终使用 HTTPS</string>
+    <string name="ssl_always_https_desc">把所有 HTTP 请求重定向到 HTTPS。</string>
+    <string name="ssl_auto_rewrites">自动 HTTPS 重写</string>
+    <string name="ssl_auto_rewrites_desc">把页面内的 http 资源链接改写为 https。</string>
+    <string name="ssl_min_tls">最低 TLS 版本</string>
+    <string name="ssl_tls13">TLS 1.3</string>
+    <string name="ssl_tls13_desc">启用最新的 TLS 1.3 协议。</string>
+
+    <!-- 域名安全 · SSL 证书 -->
+    <string name="ssl_certs_title">SSL 证书</string>
+    <string name="ssl_certs_empty">该域名暂无证书</string>
+    <string name="ssl_universal">Universal SSL</string>
+    <string name="ssl_universal_desc">由 Cloudflare 自动签发并续期的免费证书。</string>
+    <string name="ssl_cert_expires">到期 %1$s</string>
+    <string name="ssl_cert_deleted">已删除证书</string>
+    <string name="ssl_cert_delete_title">删除证书？</string>
+    <string name="ssl_cert_delete_msg">将删除该高级 / 自定义证书包，访客可能短时无法建立安全连接。</string>
+    <string name="ssl_cert_type_universal">通用 SSL</string>
+    <string name="ssl_cert_type_advanced">高级证书</string>
+    <string name="ssl_cert_type_custom">自定义证书</string>
+    <string name="ssl_cert_status_active">已签发</string>
+    <string name="ssl_cert_status_pending">待验证</string>
+    <string name="ssl_cert_status_initializing">初始化中</string>
+    <string name="ssl_cert_status_expired">已过期</string>
+    <string name="common_done">完成</string>
+
+    <!-- 域名安全 · 性能与缓存 -->
+    <string name="perf_title">性能与缓存</string>
+    <string name="perf_section_network">网络优化</string>
+    <string name="perf_section_cache">缓存</string>
+    <string name="perf_brotli">Brotli 压缩</string>
+    <string name="perf_http2">HTTP/2</string>
+    <string name="perf_http3">HTTP/3 (QUIC)</string>
+    <string name="perf_0rtt">0-RTT 连接恢复</string>
+    <string name="perf_early_hints">Early Hints</string>
+    <string name="perf_websockets">WebSockets</string>
+    <string name="perf_ipv6">IPv6 兼容</string>
+    <string name="perf_cache_level">缓存级别</string>
+    <string name="perf_cache_basic">无查询字符串</string>
+    <string name="perf_cache_simplified">忽略查询字符串</string>
+    <string name="perf_cache_aggressive">标准</string>
+    <string name="perf_always_online">Always Online</string>
+    <string name="perf_sort_qs">查询字符串排序</string>
+
+    <!-- 域名安全 · Transform Rules -->
+    <string name="tf_title">Transform Rules</string>
+    <string name="tf_phase_url">URL 重写</string>
+    <string name="tf_phase_req_head">请求头修改</string>
+    <string name="tf_phase_resp_head">响应头修改</string>
+    <string name="tf_op_set">设置</string>
+    <string name="tf_op_add">追加</string>
+    <string name="tf_op_remove">删除</string>
+    <string name="tf_saved">已保存</string>
+    <string name="tf_deleted">已删除规则</string>
+    <string name="tf_delete_title">删除规则？</string>
+    <string name="tf_unnamed">未命名规则</string>
+    <string name="tf_phase_empty">暂无规则</string>
+    <string name="tf_add">添加</string>
+    <string name="tf_new">新建规则</string>
+    <string name="tf_edit">编辑规则</string>
+    <string name="tf_expression">匹配表达式</string>
+    <string name="tf_description">描述（可选）</string>
+    <string name="tf_enabled">启用</string>
+    <string name="tf_path">重写路径</string>
+    <string name="tf_query">重写查询串</string>
+    <string name="tf_headers">头部修改</string>
+    <string name="tf_add_header">添加头部</string>
+    <string name="tf_header_name">头名称</string>
+    <string name="tf_header_value">值</string>
+
+    <!-- 域名安全 · IP 访问规则 -->
+    <string name="ip_title">IP 访问规则</string>
+    <string name="ip_empty">暂无访问规则</string>
+    <string name="ip_add">添加规则</string>
+    <string name="ip_new">新建规则</string>
+    <string name="ip_edit">编辑规则</string>
+    <string name="ip_saved">已保存</string>
+    <string name="ip_deleted">已删除规则</string>
+    <string name="ip_delete_title">删除规则？</string>
+    <string name="ip_target">匹配对象</string>
+    <string name="ip_value">值</string>
+    <string name="ip_action">动作</string>
+    <string name="ip_notes">备注（可选）</string>
+    <string name="ip_mode_block">拦截</string>
+    <string name="ip_mode_managed">托管质询</string>
+    <string name="ip_mode_js">JS 质询</string>
+    <string name="ip_mode_challenge">质询</string>
+    <string name="ip_mode_allow">允许</string>
+    <string name="ip_target_ip">IP</string>
+    <string name="ip_target_ip6">IPv6</string>
+    <string name="ip_target_range">IP 段</string>
+    <string name="ip_target_asn">ASN</string>
+    <string name="ip_target_country">国家/地区</string>
 
     <!-- Snippets -->
     <string name="snippets_title">Snippets</string>
@@ -422,6 +564,29 @@
     <string name="paywall_monthly">月付订阅</string>
     <string name="paywall_lifetime">一次性买断</string>
     <string name="paywall_note">订阅按 Google Play 计费，可随时取消。</string>
+    <!-- direct 风味（非 Play 中国大陆，激活码） -->
+    <string name="paywall_buy_lifetime">购买 Pro · HK$34.99 终身</string>
+    <string name="paywall_have_code">已购买？输入激活码</string>
+    <string name="paywall_code_hint">OC-XXXXX-XXXXX</string>
+    <string name="paywall_activate">激活</string>
+    <string name="paywall_activating">激活中…</string>
+    <string name="paywall_note_direct">一码最多激活 2 台设备 · 30 天内可在官网申请退款</string>
+    <string name="redeem_ok">已激活 Pro，感谢支持！</string>
+    <string name="redeem_invalid">激活码无效，请检查后重试</string>
+    <string name="redeem_revoked">此激活码已失效（可能已退款）</string>
+    <string name="redeem_device_limit">此激活码已达设备上限（最多 2 台）。可在官网重置已绑定设备。</string>
+    <string name="redeem_network">网络错误，请稍后重试</string>
+    <string name="paywall_deactivate">在本设备反激活</string>
+    <string name="paywall_deactivate_confirm">反激活后本设备将失去 Pro，并释放一个设备名额（可在其它设备激活）。确定继续？</string>
+
+    <!-- 自助更新（仅 direct sideload 包，无应用商店推更新） -->
+    <string name="update_title">发现新版本 %1$s</string>
+    <string name="update_message">有新版本可用，建议更新到最新版本。</string>
+    <string name="update_now">立即更新</string>
+    <string name="update_later">稍后</string>
+    <string name="update_skip">忽略此版本</string>
+    <string name="update_downloading">下载中…</string>
+    <string name="update_install_failed">安装失败，请重试或从官网手动下载</string>
 
     <!-- 添加域名（新建 Zone） -->
     <string name="addzone_title">添加域名</string>
@@ -571,4 +736,10 @@
     <string name="settings_feedback">发送反馈</string>
     <string name="feedback_subject">Orange Cloud 反馈</string>
     <string name="feedback_no_mail">未找到邮件应用</string>
+    <string name="feedback_log_note">（已附带诊断日志，仅含请求路径/状态码等运行记录，不含令牌或密钥）</string>
+
+    <!-- 桌面小组件（Glance）-->
+    <string name="widget_description">账号总览：今日请求合计的晨昏天窗卡</string>
+    <string name="widget_today_requests">今日请求</string>
+    <string name="widget_footer">%1$s 域名 · %2$s</string>
 </resources>

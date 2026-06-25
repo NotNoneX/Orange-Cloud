@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
+<resources>
+    <string name="whatsnew_1_3_0_title">Alan adı güvenlik paketi</string>
+    <string name="whatsnew_1_3_0_detail">Yeni SSL/TLS şifreleme modları ve uç sertifikalar, Universal SSL anahtarı, Transform Rules, IP erişim kuralları ve ayrıca HTTP/2·HTTP/3·Brotli ile diğer performans ve önbellek denetimleri.</string>
+    <string name="whatsnew_1_3_1_title">R2 yükseltmesi ve URL’ye göre temizleme</string>
+    <string name="whatsnew_1_3_1_detail">R2 artık klasör gezinme, nesne kopyalama/taşıma ve bucket başına CORS ve genel erişim ayarlarını destekliyor; önbellek temizlemeye “URL’ye göre temizleme” eklendi.</string>
+    <string name="whatsnew_1_3_2_title">Ana ekran widget’ı, canlı günlükler ve daha geniş destek</string>
+    <string name="whatsnew_1_3_2_detail">Yeni bir şafak vakti “hesap özeti” ana ekran widget’ı; canlı günlükler Live Updates’e (Android 16) yükseltildi; Yardım ve geri bildirim bir tanılama günlüğü ekleyebilir; artık Android 9 ve üzerini destekliyor.</string>
+    <string name="whatsnew_1_1_0_title">From viewing to managing</string>
+    <string name="whatsnew_1_1_0_detail">You can now add domains, create and delete D1 databases and tunnels, manage Worker variables/secrets/triggers/domains, and a tunnel’s public hostname routes.</string>
+    <string name="whatsnew_1_0_0_title">One-tap OAuth sign-in</string>
+    <string name="whatsnew_1_0_0_detail">Sign in with Cloudflare\'s official authorization — no API tokens to paste.</string>
+    <string name="whatsnew_1_0_1_title">Domains · Workers · Storage</string>
+    <string name="whatsnew_1_0_1_detail">DNS, analytics, WAF, Snippets, Workers live logs, and R2/D1/KV storage — all in one place.</string>
+</resources>

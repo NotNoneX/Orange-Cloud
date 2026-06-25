@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">網域安全套件</string>
+    <string name="whatsnew_1_3_0_detail">新增 SSL/TLS 加密模式與邊緣憑證、Universal SSL 開關、Transform Rules、IP 存取規則，以及 HTTP/2·HTTP/3·Brotli 等效能與快取開關。</string>
+    <string name="whatsnew_1_3_1_title">R2 升級與依 URL 清快取</string>
+    <string name="whatsnew_1_3_1_detail">R2 支援資料夾瀏覽、物件複製/移動、儲存桶的 CORS 與公開存取設定；快取清理新增「依 URL 清理」。</string>
+    <string name="whatsnew_1_3_2_title">桌面小工具、即時日誌與更廣相容</string>
+    <string name="whatsnew_1_3_2_detail">新增晨昏「帳戶總覽」桌面小工具；即時日誌升級為實況通知（Android 16）；「說明與意見回饋」可附帶診斷日誌；現已相容 Android 9 以上。</string>
     <string name="whatsnew_1_1_0_title">從查看到管理</string>
     <string name="whatsnew_1_1_0_detail">現在可以新增網域、建立並刪除 D1 資料庫與隧道，管理 Worker 變數/密鑰/觸發器/網域，以及隧道的公開主機名稱路由。</string>
     <string name="whatsnew_1_0_0_title">OAuth 一鍵登入</string>

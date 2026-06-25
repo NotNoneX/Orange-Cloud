@@ -1,0 +1,145 @@
+package jiamin.chen.orangecloud.ui.storage
+
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jiamin.chen.orangecloud.core.auth.AuthRepository
+import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.data.model.R2BucketUsage
+import jiamin.chen.orangecloud.data.model.R2CorsRule
+import jiamin.chen.orangecloud.data.model.R2CustomDomain
+import jiamin.chen.orangecloud.data.repository.AccountStore
+import jiamin.chen.orangecloud.data.repository.StorageRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+sealed interface BucketSettingsEvent {
+    data object CorsCleared : BucketSettingsEvent
+    data object DomainRemoved : BucketSettingsEvent
+    data class Error(val message: String?) : BucketSettingsEvent
+}
+
+data class R2BucketSettingsUiState(
+    val bucket: String = "",
+    val publicEnabled: Boolean = false,
+    val publicDomain: String? = null,
+    val publicLoaded: Boolean = false,
+    val customDomains: List<R2CustomDomain> = emptyList(),
+    val corsRules: List<R2CorsRule> = emptyList(),
+    val corsLoaded: Boolean = false,
+    /** 本桶用量（best-effort GraphQL，免费账号常被 authz 挡 → null 不显示）。 */
+    val usage: R2BucketUsage? = null,
+    val isLoading: Boolean = false,
+    val isTogglingPublic: Boolean = false,
+    val missingScope: Boolean = false,
+    val canWrite: Boolean = false,
+)
+
+/** R2 桶设置：公开访问 (r2.dev) + 自定义域 + CORS（对应 iOS R2BucketSettingsView）。 */
+@HiltViewModel
+class R2BucketSettingsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val accountStore: AccountStore,
+    private val storageRepository: StorageRepository,
+    authRepository: AuthRepository,
+) : ViewModel() {
+
+    private val bucket: String = checkNotNull(savedStateHandle["bucket"])
+    private val hasRead = authRepository.hasScope(Scopes.R2_READ)
+    private val canWrite = authRepository.hasScope(Scopes.R2_WRITE)
+
+    private val _uiState = MutableStateFlow(
+        R2BucketSettingsUiState(
+            bucket = bucket,
+            isLoading = hasRead,
+            missingScope = !hasRead,
+            canWrite = canWrite,
+        ),
+    )
+    val uiState: StateFlow<R2BucketSettingsUiState> = _uiState.asStateFlow()
+
+    private val eventChannel = Channel<BucketSettingsEvent>(Channel.BUFFERED)
+    val events: Flow<BucketSettingsEvent> = eventChannel.receiveAsFlow()
+
+    init {
+        if (hasRead) load()
+    }
+
+    fun load() {
+        if (!hasRead) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            val accountId = accountStore.run { ensureLoaded(); selectedAccountId.value } ?: run {
+                _uiState.update { it.copy(isLoading = false) }
+                return@launch
+            }
+            // 三项各自独立、best-effort：单项失败（如 CORS 未设置）不影响其它。
+            runCatching { storageRepository.managedDomain(accountId, bucket) }.getOrNull()?.let { md ->
+                _uiState.update { it.copy(publicEnabled = md.enabled ?: false, publicDomain = md.domain, publicLoaded = true) }
+            }
+            runCatching { storageRepository.customDomains(accountId, bucket) }.getOrNull()?.let { domains ->
+                _uiState.update { it.copy(customDomains = domains) }
+            }
+            runCatching { storageRepository.corsPolicy(accountId, bucket) }.getOrNull()?.let { cors ->
+                _uiState.update { it.copy(corsRules = cors.rules.orEmpty(), corsLoaded = true) }
+            }
+            // 用量是附加信息：account-analytics 常被 authz 挡，失败即不显示。
+            runCatching { storageRepository.r2UsageByBucket(accountId)[bucket] }.getOrNull()?.let { u ->
+                _uiState.update { it.copy(usage = u) }
+            }
+            _uiState.update { it.copy(isLoading = false) }
+        }
+    }
+
+    fun setPublic(enabled: Boolean) {
+        if (!canWrite || _uiState.value.isTogglingPublic) return
+        _uiState.update { it.copy(isTogglingPublic = true) }
+        viewModelScope.launch {
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.setManagedDomainEnabled(accountId, bucket, enabled)
+                _uiState.update { it.copy(publicEnabled = enabled) }
+            } catch (e: Exception) {
+                eventChannel.send(BucketSettingsEvent.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(isTogglingPublic = false) }
+            }
+        }
+    }
+
+    fun removeDomain(domain: String) {
+        if (!canWrite) return
+        viewModelScope.launch {
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.removeCustomDomain(accountId, bucket, domain)
+                _uiState.update { it.copy(customDomains = it.customDomains.filterNot { d -> d.domain == domain }) }
+                eventChannel.send(BucketSettingsEvent.DomainRemoved)
+            } catch (e: Exception) {
+                eventChannel.send(BucketSettingsEvent.Error(e.message))
+            }
+        }
+    }
+
+    fun clearCors() {
+        if (!canWrite) return
+        viewModelScope.launch {
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.deleteCorsPolicy(accountId, bucket)
+                _uiState.update { it.copy(corsRules = emptyList()) }
+                eventChannel.send(BucketSettingsEvent.CorsCleared)
+            } catch (e: Exception) {
+                eventChannel.send(BucketSettingsEvent.Error(e.message))
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -50,19 +51,51 @@ class TailNotifier @Inject constructor(
         }
         val pending = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val statusRes = if (connected) R.string.tail_connected else R.string.tail_disconnected
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+        val statusText = context.getString(if (connected) R.string.tail_connected else R.string.tail_disconnected)
+        val contentText = lastLine.ifBlank { context.getString(R.string.tail_events, eventCount) }
+
+        // Android 16（API 36）促升为「实况通知」（Live Update，状态栏常驻 chip + 短文）；
+        // NotificationCompat 暂未透出促升 API，故 36+ 直接用平台 Notification.Builder。低版本走常驻通知。
+        val notification = if (Build.VERSION.SDK_INT >= 36 && connected) {
+            buildPromoted(scriptName, contentText, statusText, eventCount, pending)
+        } else {
+            NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(scriptName)
+                .setContentText(contentText)
+                .setSubText(statusText)
+                .setOngoing(connected)
+                .setOnlyAlertOnce(true)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setContentIntent(pending)
+                .build()
+        }
+        runCatching { manager.notify(NOTIFICATION_ID, notification) }
+    }
+
+    /** API 36 实况通知：setShortCriticalText 状态栏短文（实时事件数）+ FLAG_PROMOTED_ONGOING 促升。 */
+    @RequiresApi(36)
+    private fun buildPromoted(
+        scriptName: String,
+        contentText: String,
+        statusText: String,
+        eventCount: Int,
+        pending: PendingIntent,
+    ): Notification {
+        val notification = Notification.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(scriptName)
-            .setContentText(lastLine.ifBlank { context.getString(R.string.tail_events, eventCount) })
-            .setSubText(context.getString(statusRes))
-            .setOngoing(connected)
+            .setContentText(contentText)
+            .setSubText(statusText)
+            .setOngoing(true)
             .setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_SERVICE)
             .setContentIntent(pending)
-        // TODO(API36): Notification.Builder.requestPromotedOngoing()/setShortCriticalText 促升为实况通知（NotificationCompat 暂未透出）。
-
-        runCatching { manager.notify(NOTIFICATION_ID, builder.build()) }
+            .setShortCriticalText(eventCount.toString())
+            .build()
+        // 促升 API 仅暴露为标志位（Builder 无 requestPromotedOngoing 方法）。
+        notification.flags = notification.flags or Notification.FLAG_PROMOTED_ONGOING
+        return notification
     }
 
     fun cancel() {

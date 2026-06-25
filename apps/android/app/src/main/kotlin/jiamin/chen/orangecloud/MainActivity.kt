@@ -2,6 +2,7 @@ package jiamin.chen.orangecloud
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +18,7 @@ import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.OAuthConfig
 import jiamin.chen.orangecloud.core.design.theme.OrangeCloudTheme
 import jiamin.chen.orangecloud.core.purchase.BillingGateway
+import jiamin.chen.orangecloud.core.purchase.RedeemOutcome
 import jiamin.chen.orangecloud.core.system.AppAppearance
 import jiamin.chen.orangecloud.core.system.AppPrefs
 import jiamin.chen.orangecloud.ui.root.OrangeCloudRoot
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         billingGateway.connect()
         handleOAuthRedirect(intent)
+        handleRedeemRedirect(intent)
         setContent {
             val appearance by appPrefs.appearance.collectAsStateWithLifecycle(initialValue = AppAppearance.SYSTEM)
             val darkTheme = when (appearance) {
@@ -65,6 +68,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         handleOAuthRedirect(intent)
+        handleRedeemRedirect(intent)
     }
 
     /** 接住 Web 后端 302 跳回的 orangecloud://oauth/callback，交给 AuthRepository 验 state + 换 token。 */
@@ -72,5 +76,22 @@ class MainActivity : ComponentActivity() {
         val data = intent?.data ?: return
         if (data.scheme != OAuthConfig.CALLBACK_SCHEME || data.host != OAuthConfig.CALLBACK_HOST) return
         lifecycleScope.launch { authRepository.handleRedirect(data) }
+    }
+
+    /** direct 风味：接住 Web 成功页的 orangecloud://redeem?code=...，兑换并提示结果（play/oss 的清单不含此 filter）。 */
+    private fun handleRedeemRedirect(intent: Intent?) {
+        val data = intent?.data ?: return
+        if (data.scheme != "orangecloud" || data.host != "redeem") return
+        val code = data.getQueryParameter("code")?.takeIf { it.isNotBlank() } ?: return
+        lifecycleScope.launch {
+            val msg = when (billingGateway.redeem(code)) {
+                RedeemOutcome.SUCCESS -> R.string.redeem_ok
+                RedeemOutcome.INVALID -> R.string.redeem_invalid
+                RedeemOutcome.REVOKED -> R.string.redeem_revoked
+                RedeemOutcome.DEVICE_LIMIT -> R.string.redeem_device_limit
+                else -> R.string.redeem_network
+            }
+            Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+        }
     }
 }

@@ -2,4 +2,6 @@
 <paths>
     <!-- R2 对象下载到缓存目录，经 FileProvider 授权给其他应用打开 -->
     <cache-path name="r2_cache" path="r2/" />
+    <!-- 诊断日志导出文件，作反馈邮件附件授权给邮件应用 -->
+    <cache-path name="logs" path="logs/" />
 </paths>

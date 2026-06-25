@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">Domain security suite</string>
+    <string name="whatsnew_1_3_0_detail">New SSL/TLS encryption modes and edge certificates, Universal SSL toggle, Transform Rules, IP access rules, plus HTTP/2·HTTP/3·Brotli and other performance and cache controls.</string>
+    <string name="whatsnew_1_3_1_title">R2 upgrade &amp; purge by URL</string>
+    <string name="whatsnew_1_3_1_detail">R2 now supports folder browsing, object copy/move, and per-bucket CORS and public access settings; cache purge adds “purge by URL”.</string>
+    <string name="whatsnew_1_3_2_title">Home widget, live logs &amp; wider support</string>
+    <string name="whatsnew_1_3_2_detail">A new daybreak “account overview” home widget; live tail logs are promoted to Live Updates (Android 16); Help &amp; Feedback can attach a diagnostic log; now supports Android 9 and above.</string>
     <string name="whatsnew_1_1_0_title">From viewing to managing</string>
     <string name="whatsnew_1_1_0_detail">You can now add domains, create and delete D1 databases and tunnels, manage Worker variables/secrets/triggers/domains, and a tunnel’s public hostname routes.</string>
     <string name="whatsnew_1_0_0_title">One-tap OAuth sign-in</string>

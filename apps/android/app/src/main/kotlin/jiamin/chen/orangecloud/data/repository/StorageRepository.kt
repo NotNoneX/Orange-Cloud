@@ -1,5 +1,7 @@
 package jiamin.chen.orangecloud.data.repository
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.D1CreateRequest
 import jiamin.chen.orangecloud.data.model.D1Database
@@ -9,8 +11,20 @@ import jiamin.chen.orangecloud.data.model.KVKey
 import jiamin.chen.orangecloud.data.model.KVNamespace
 import jiamin.chen.orangecloud.data.model.R2Bucket
 import jiamin.chen.orangecloud.data.model.R2BucketList
+import jiamin.chen.orangecloud.data.model.R2BucketUsage
+import jiamin.chen.orangecloud.data.model.R2CorsPolicy
+import jiamin.chen.orangecloud.data.model.R2CustomDomain
+import jiamin.chen.orangecloud.data.model.R2CustomDomainList
+import jiamin.chen.orangecloud.data.model.R2ManagedDomain
+import jiamin.chen.orangecloud.data.model.R2ManagedDomainUpdate
 import jiamin.chen.orangecloud.data.model.R2Object
+import jiamin.chen.orangecloud.data.model.R2ObjectPage
+import jiamin.chen.orangecloud.data.model.R2UsageData
+import jiamin.chen.orangecloud.data.model.R2UsageVariables
 import jiamin.chen.orangecloud.data.model.encodeStorageKey
+import java.io.File
+import java.time.Instant
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,22 +34,31 @@ import javax.inject.Singleton
  */
 @Singleton
 class StorageRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val api: CfApiClient,
 ) {
     // MARK: - R2
 
+    /** client/v4 单次 PUT 上限（~300MB）；超过无法在本 App 复制/上传（无 multipart / 服务端 copy）。 */
+    val maxUploadBytes: Long = 300L * 1024 * 1024
+
     suspend fun listBuckets(accountId: String): List<R2Bucket> =
         api.get<R2BucketList>("accounts/$accountId/r2/buckets", listOf("per_page" to "100")).buckets
 
-    /** 对象列表（游标分页，一次一页）→ (对象, 下一页游标 or null)。 */
-    suspend fun listObjects(accountId: String, bucket: String, cursor: String?): Pair<List<R2Object>, String?> {
+    /**
+     * 对象列表一页。传 delimiter=/ 让服务端把子前缀折叠成「文件夹」，prefix 为当前所在文件夹；
+     * result_info.delimited_prefixes 即子文件夹前缀列表。
+     */
+    suspend fun listObjects(accountId: String, bucket: String, prefix: String, cursor: String?): R2ObjectPage {
         val query = buildList {
             add("per_page" to "100")
+            add("delimiter" to "/")
+            if (prefix.isNotEmpty()) add("prefix" to prefix)
             cursor?.let { add("cursor" to it) }
         }
         val paged = api.getList<R2Object>("accounts/$accountId/r2/buckets/$bucket/objects", query)
         val next = if (paged.info?.isTruncated == true) paged.info?.cursor else null
-        return paged.items to next
+        return R2ObjectPage(paged.items, paged.info?.delimitedPrefixes.orEmpty(), next)
     }
 
     suspend fun getObjectBytes(accountId: String, bucket: String, key: String): ByteArray =
@@ -47,6 +70,128 @@ class StorageRepository @Inject constructor(
 
     suspend fun deleteObject(accountId: String, bucket: String, key: String) =
         api.delete("accounts/$accountId/r2/buckets/$bucket/objects/${encodeStorageKey(key)}")
+
+    /**
+     * 流式复制对象到新 key（同桶，过临时文件不入内存）。onProgress 0→0.5 下载、0.5→1 上传。
+     * client/v4 无服务端 copy / multipart，只能过设备；超 maxUploadBytes 无法复制。
+     */
+    suspend fun copyObject(
+        accountId: String, bucket: String, sourceKey: String, destKey: String,
+        contentType: String, onProgress: (Float) -> Unit,
+    ) {
+        val base = "accounts/$accountId/r2/buckets/$bucket/objects"
+        val temp = File.createTempFile("r2copy", null, context.cacheDir)
+        try {
+            onProgress(0f)
+            api.downloadToFile("$base/${encodeStorageKey(sourceKey)}", temp)
+            onProgress(0.5f)
+            api.putFile("$base/${encodeStorageKey(destKey)}", temp, contentType)
+            onProgress(1f)
+        } finally {
+            temp.delete()
+        }
+    }
+
+    /** 精确判断某 key 是否存在（client/v4 对象端点无 HEAD，用 prefix 列举核对）。 */
+    suspend fun objectExists(accountId: String, bucket: String, key: String): Boolean =
+        listObjects(accountId, bucket, prefix = key, cursor = null).objects.any { it.key == key }
+
+    // MARK: - R2 桶设置（公开访问 / CORS）
+
+    private fun bucketPath(accountId: String, bucket: String) = "accounts/$accountId/r2/buckets/$bucket"
+
+    suspend fun managedDomain(accountId: String, bucket: String): R2ManagedDomain =
+        api.get("${bucketPath(accountId, bucket)}/domains/managed")
+
+    suspend fun setManagedDomainEnabled(accountId: String, bucket: String, enabled: Boolean) =
+        api.putChecked("${bucketPath(accountId, bucket)}/domains/managed", R2ManagedDomainUpdate(enabled))
+
+    suspend fun customDomains(accountId: String, bucket: String): List<R2CustomDomain> =
+        api.get<R2CustomDomainList>("${bucketPath(accountId, bucket)}/domains/custom").domains.orEmpty()
+
+    suspend fun removeCustomDomain(accountId: String, bucket: String, domain: String) =
+        api.delete("${bucketPath(accountId, bucket)}/domains/custom/${encodeStorageKey(domain)}")
+
+    /** 当前 CORS 策略（无策略时返回空 rules）。 */
+    suspend fun corsPolicy(accountId: String, bucket: String): R2CorsPolicy =
+        runCatching { api.get<R2CorsPolicy>("${bucketPath(accountId, bucket)}/cors") }.getOrDefault(R2CorsPolicy())
+
+    /** 整组写入 CORS 策略（PUT 覆盖）。 */
+    suspend fun putCorsPolicy(accountId: String, bucket: String, policy: R2CorsPolicy) =
+        api.putChecked("${bucketPath(accountId, bucket)}/cors", policy)
+
+    suspend fun deleteCorsPolicy(accountId: String, bucket: String) =
+        api.delete("${bucketPath(accountId, bucket)}/cors")
+
+    /**
+     * 每桶用量（本月操作 Class A/B + 当前存储快照），account-analytics GraphQL。
+     * 免费账号 / 无 R2 数据集权限时会被 authz 挡 → 调用方 best-effort 接住，返回空表。
+     * 对齐 iOS AnalyticsService.r2UsageByBucket。
+     */
+    suspend fun r2UsageByBucket(accountId: String): Map<String, R2BucketUsage> {
+        val now = Instant.now()
+        val today = now.atZone(ZoneOffset.UTC).toLocalDate()
+        val monthStart = today.withDayOfMonth(1).atStartOfDay(ZoneOffset.UTC).toInstant().toString()
+        val todayStart = today.atStartOfDay(ZoneOffset.UTC).toInstant().toString()
+        val data = api.graphQL<R2UsageData, R2UsageVariables>(
+            R2_USAGE_QUERY,
+            R2UsageVariables(accountId, monthStart, todayStart, now.toString()),
+        )
+        val account = data.viewer?.accounts?.firstOrNull() ?: return emptyMap()
+        val map = mutableMapOf<String, R2BucketUsage>()
+        account.r2Storage?.forEach { g ->
+            val b = g.dimensions?.bucketName?.takeIf { it.isNotEmpty() } ?: return@forEach
+            val cur = map[b] ?: R2BucketUsage()
+            map[b] = cur.copy(
+                storageBytes = (g.max?.payloadSize ?: 0) + (g.max?.metadataSize ?: 0),
+                objectCount = g.max?.objectCount ?: 0,
+            )
+        }
+        account.r2Ops?.forEach { g ->
+            val b = g.dimensions?.bucketName?.takeIf { it.isNotEmpty() } ?: return@forEach
+            val cur = map[b] ?: R2BucketUsage()
+            val req = (g.sum?.requests ?: 0L).toInt()
+            map[b] = if (isClassB(g.dimensions?.actionType)) {
+                cur.copy(classBRequests = cur.classBRequests + req)
+            } else {
+                cur.copy(classARequests = cur.classARequests + req)
+            }
+        }
+        return map
+    }
+
+    /** R2 Class B（读类）操作；其余计入 Class A。 */
+    private fun isClassB(actionType: String?): Boolean = actionType in CLASS_B_ACTIONS
+
+    companion object {
+        private val CLASS_B_ACTIONS = setOf(
+            "GetObject", "HeadObject", "HeadBucket", "UsageSummary",
+            "GetBucketEncryption", "GetBucketLocation", "GetBucketCors", "GetBucketLifecycleConfiguration",
+        )
+
+        private val R2_USAGE_QUERY = """
+            query (${'$'}accountTag: string!, ${'$'}monthStart: Time!, ${'$'}todayStart: Time!, ${'$'}now: Time!) {
+              viewer {
+                accounts(filter: { accountTag: ${'$'}accountTag }) {
+                  r2Ops: r2OperationsAdaptiveGroups(
+                    limit: 10000,
+                    filter: { datetime_geq: ${'$'}monthStart, datetime_leq: ${'$'}now }
+                  ) {
+                    dimensions { actionType bucketName }
+                    sum { requests }
+                  }
+                  r2Storage: r2StorageAdaptiveGroups(
+                    limit: 1000,
+                    filter: { datetime_geq: ${'$'}todayStart, datetime_leq: ${'$'}now }
+                  ) {
+                    dimensions { bucketName }
+                    max { payloadSize metadataSize objectCount }
+                  }
+                }
+              }
+            }
+        """.trimIndent()
+    }
 
     // MARK: - D1
 

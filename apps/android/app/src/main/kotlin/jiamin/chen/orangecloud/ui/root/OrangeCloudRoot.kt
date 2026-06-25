@@ -1,5 +1,6 @@
 package jiamin.chen.orangecloud.ui.root
 
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,13 +50,20 @@ import jiamin.chen.orangecloud.ui.network.TunnelDetailScreen
 import jiamin.chen.orangecloud.ui.network.TunnelListScreen
 import jiamin.chen.orangecloud.ui.paywall.ProGate
 import jiamin.chen.orangecloud.ui.waf.WafRulesScreen
+import jiamin.chen.orangecloud.ui.update.UpdateDialog
+import jiamin.chen.orangecloud.ui.update.UpdateViewModel
 import jiamin.chen.orangecloud.ui.whatsnew.WhatsNewDialog
 import jiamin.chen.orangecloud.ui.whatsnew.WhatsNewViewModel
 import jiamin.chen.orangecloud.ui.login.LoginScreen
 import jiamin.chen.orangecloud.ui.settings.IdentityDetailScreen
 import jiamin.chen.orangecloud.ui.settings.SettingsScreen
 import jiamin.chen.orangecloud.ui.status.StatusScreen
+import jiamin.chen.orangecloud.ui.firewall.ZoneAccessRulesScreen
+import jiamin.chen.orangecloud.ui.transform.ZoneTransformScreen
+import jiamin.chen.orangecloud.ui.zonesettings.ZonePerformanceScreen
 import jiamin.chen.orangecloud.ui.zonesettings.ZoneSettingsScreen
+import jiamin.chen.orangecloud.ui.zonesettings.ZoneSslCertsScreen
+import jiamin.chen.orangecloud.ui.zonesettings.ZoneSslSettingsScreen
 import jiamin.chen.orangecloud.ui.snippets.SnippetEditorScreen
 import jiamin.chen.orangecloud.ui.snippets.SnippetsListScreen
 import jiamin.chen.orangecloud.ui.storage.D1DatabaseListScreen
@@ -64,6 +72,7 @@ import jiamin.chen.orangecloud.ui.storage.D1TableScreen
 import jiamin.chen.orangecloud.ui.storage.KVKeyListScreen
 import jiamin.chen.orangecloud.ui.storage.KVNamespaceListScreen
 import jiamin.chen.orangecloud.ui.storage.R2BucketListScreen
+import jiamin.chen.orangecloud.ui.storage.R2BucketSettingsScreen
 import jiamin.chen.orangecloud.ui.storage.R2ObjectListScreen
 import jiamin.chen.orangecloud.ui.storage.StorageHubScreen
 import jiamin.chen.orangecloud.ui.workers.WorkerDetailScreen
@@ -83,6 +92,26 @@ fun OrangeCloudRoot(viewModel: RootViewModel = hiltViewModel()) {
         !authState.isReady -> SplashScreen()
         authState.isLoggedIn -> MainScaffold()
         else -> LoginScreen()
+    }
+
+    // 自助更新提示：仅 sideload 的 direct 包实际触发，覆盖于任意鉴权态之上。
+    val updateViewModel: UpdateViewModel = hiltViewModel()
+    val update by updateViewModel.available.collectAsStateWithLifecycle()
+    val installing by updateViewModel.installing.collectAsStateWithLifecycle()
+    val updateContext = LocalContext.current
+    update?.let { info ->
+        UpdateDialog(
+            info = info,
+            installing = installing,
+            onUpdate = {
+                // 应用内安装失败（无权限 / 签名不符 / 下载失败）回退浏览器下载
+                updateViewModel.install { url ->
+                    runCatching { updateContext.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+                }
+            },
+            onSkip = updateViewModel::skip,
+            onDismiss = updateViewModel::dismiss,
+        )
     }
 }
 
@@ -110,6 +139,7 @@ private object Dest {
     // 存储下钻
     const val R2_BUCKETS = "r2/buckets"
     const val R2_OBJECTS_ROUTE = "r2/objects/{bucket}"
+    const val R2_BUCKET_SETTINGS_ROUTE = "r2/settings/{bucket}"
     const val D1_DATABASES = "d1/databases"
     const val D1_QUERY_ROUTE = "d1/query/{dbId}?dbName={dbName}"
     const val D1_TABLE_ROUTE = "d1/table/{dbId}?table={table}"
@@ -121,6 +151,11 @@ private object Dest {
     const val SNIPPETS_ROUTE = "snippets/{zoneId}?zoneName={zoneName}"
     const val SNIPPET_EDIT_ROUTE = "snippetEdit/{zoneId}?zoneName={zoneName}&name={name}"
     const val ZONE_SETTINGS_ROUTE = "zonesettings/{zoneId}?zoneName={zoneName}"
+    const val SSL_ROUTE = "ssl/{zoneId}?zoneName={zoneName}"
+    const val SSL_CERTS_ROUTE = "sslcerts/{zoneId}?zoneName={zoneName}"
+    const val PERFORMANCE_ROUTE = "performance/{zoneId}?zoneName={zoneName}"
+    const val TRANSFORM_ROUTE = "transform/{zoneId}?zoneName={zoneName}"
+    const val ACCESS_RULES_ROUTE = "accessrules/{zoneId}?zoneName={zoneName}"
     const val WORKER_ROUTE = "worker/{scriptName}"
     const val WORKER_SECRETS_ROUTE = "worker/{scriptName}/secrets"
     const val WORKER_TRIGGERS_ROUTE = "worker/{scriptName}/triggers"
@@ -134,6 +169,11 @@ private object Dest {
     fun waf(zoneId: String, zoneName: String) = zoneScoped("waf", zoneId, zoneName)
     fun snippets(zoneId: String, zoneName: String) = zoneScoped("snippets", zoneId, zoneName)
     fun zoneSettings(zoneId: String, zoneName: String) = zoneScoped("zonesettings", zoneId, zoneName)
+    fun ssl(zoneId: String, zoneName: String) = zoneScoped("ssl", zoneId, zoneName)
+    fun sslCerts(zoneId: String, zoneName: String) = zoneScoped("sslcerts", zoneId, zoneName)
+    fun performance(zoneId: String, zoneName: String) = zoneScoped("performance", zoneId, zoneName)
+    fun transform(zoneId: String, zoneName: String) = zoneScoped("transform", zoneId, zoneName)
+    fun accessRules(zoneId: String, zoneName: String) = zoneScoped("accessrules", zoneId, zoneName)
     fun snippetEdit(zoneId: String, zoneName: String, name: String) =
         "snippetEdit/$zoneId?zoneName=${Uri.encode(zoneName)}&name=${Uri.encode(name)}"
     fun identity(sessionId: String): String = "identity/${Uri.encode(sessionId)}"
@@ -144,6 +184,7 @@ private object Dest {
     fun workerDomains(scriptName: String): String = "worker/${Uri.encode(scriptName)}/domains"
     fun tail(scriptName: String): String = "tail/${Uri.encode(scriptName)}"
     fun r2Objects(bucket: String): String = "r2/objects/${Uri.encode(bucket)}"
+    fun r2Settings(bucket: String): String = "r2/settings/${Uri.encode(bucket)}"
     fun d1Query(dbId: String, dbName: String): String = "d1/query/$dbId?dbName=${Uri.encode(dbName)}"
     fun d1Table(dbId: String, table: String): String = "d1/table/$dbId?table=${Uri.encode(table)}"
     fun kvKeys(nsId: String, nsTitle: String): String = "kv/keys/$nsId?nsTitle=${Uri.encode(nsTitle)}"
@@ -180,8 +221,11 @@ private fun MainScaffold() {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    // 下钻页（DNS / Worker 详情）仍高亮其父标签
-    val selectedTop = Dest.topOf(currentRoute)
+    // 下钻页仍高亮其父标签；付费墙是覆盖在来源页上的覆盖层、不归任何标签，
+    // 故按来源页（上一条回退栈）高亮，避免落到 topOf 的 else 分支误高亮「域名」。
+    val selectedTop =
+        if (currentRoute == Dest.PAYWALL) Dest.topOf(navController.previousBackStackEntry?.destination?.route)
+        else Dest.topOf(currentRoute)
 
     val whatsNewViewModel: WhatsNewViewModel = hiltViewModel()
     val whatsNewRelease by whatsNewViewModel.release.collectAsStateWithLifecycle()
@@ -261,6 +305,11 @@ private fun MainScaffold() {
                     onOpenAnalytics = { id, name -> navController.navigate(Dest.analytics(id, name)) },
                     onOpenWaf = { id, name -> navController.navigate(Dest.waf(id, name)) },
                     onOpenSnippets = { id, name -> navController.navigate(Dest.snippets(id, name)) },
+                    onOpenSsl = { id, name -> navController.navigate(Dest.ssl(id, name)) },
+                    onOpenSslCerts = { id, name -> navController.navigate(Dest.sslCerts(id, name)) },
+                    onOpenTransform = { id, name -> navController.navigate(Dest.transform(id, name)) },
+                    onOpenAccessRules = { id, name -> navController.navigate(Dest.accessRules(id, name)) },
+                    onOpenPerformance = { id, name -> navController.navigate(Dest.performance(id, name)) },
                     onOpenSettings = { id, name -> navController.navigate(Dest.zoneSettings(id, name)) },
                 )
             }
@@ -278,6 +327,11 @@ private fun MainScaffold() {
                     onOpenAnalytics = { navController.navigate(Dest.analytics(zoneId, zoneName)) },
                     onOpenWaf = { navController.navigate(Dest.waf(zoneId, zoneName)) },
                     onOpenSnippets = { navController.navigate(Dest.snippets(zoneId, zoneName)) },
+                    onOpenSsl = { navController.navigate(Dest.ssl(zoneId, zoneName)) },
+                    onOpenSslCerts = { navController.navigate(Dest.sslCerts(zoneId, zoneName)) },
+                    onOpenTransform = { navController.navigate(Dest.transform(zoneId, zoneName)) },
+                    onOpenAccessRules = { navController.navigate(Dest.accessRules(zoneId, zoneName)) },
+                    onOpenPerformance = { navController.navigate(Dest.performance(zoneId, zoneName)) },
                     onOpenSettings = { navController.navigate(Dest.zoneSettings(zoneId, zoneName)) },
                 )
             }
@@ -321,6 +375,36 @@ private fun MainScaffold() {
                 arguments = zoneArgs(),
             ) {
                 ZoneSettingsScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.SSL_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ZoneSslSettingsScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.SSL_CERTS_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ZoneSslCertsScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.PERFORMANCE_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ZonePerformanceScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.TRANSFORM_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ZoneTransformScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.ACCESS_RULES_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ZoneAccessRulesScreen(onBack = { navController.popBackStack() })
             }
             composable(
                 route = Dest.DNS_ROUTE,
@@ -409,8 +493,18 @@ private fun MainScaffold() {
             composable(
                 route = Dest.R2_OBJECTS_ROUTE,
                 arguments = listOf(navArgument("bucket") { type = NavType.StringType }),
+            ) { entry ->
+                val bucket = entry.arguments?.getString("bucket").orEmpty()
+                R2ObjectListScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenSettings = { navController.navigate(Dest.r2Settings(bucket)) },
+                )
+            }
+            composable(
+                route = Dest.R2_BUCKET_SETTINGS_ROUTE,
+                arguments = listOf(navArgument("bucket") { type = NavType.StringType }),
             ) {
-                R2ObjectListScreen(onBack = { navController.popBackStack() })
+                R2BucketSettingsScreen(onBack = { navController.popBackStack() })
             }
             composable(Dest.D1_DATABASES) {
                 D1DatabaseListScreen(
