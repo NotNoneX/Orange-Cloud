@@ -18,5 +18,9 @@ data class PurgeRequest(
     @SerialName("purge_everything") val purgeEverything: Boolean,
 )
 
+/** 按 URL 单文件清缓存（单次最多 30 个 URL；2025-04 起所有套餐可用）。 */
+@Serializable
+data class PurgeFilesRequest(val files: List<String>)
+
 @Serializable
 data class PurgeResult(val id: String? = null)

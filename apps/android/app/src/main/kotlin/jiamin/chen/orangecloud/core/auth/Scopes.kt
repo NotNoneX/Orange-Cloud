@@ -12,6 +12,8 @@ object Scopes {
     const val DNS_WRITE = "dns.write"
     const val WORKERS_READ = "workers-scripts.read"
     const val WORKERS_WRITE = "workers-scripts.write"
+    const val WORKERS_ROUTES_READ = "workers-routes.read"
+    const val WORKERS_ROUTES_WRITE = "workers-routes.write"
     const val WORKERS_TAIL_READ = "workers-tail.read"
     const val SNIPPETS_READ = "snippets.read"
     const val SNIPPETS_WRITE = "snippets.write"
@@ -28,6 +30,14 @@ object Scopes {
     const val ZONE_SETTINGS_READ = "zone-settings.read"
     const val ZONE_SETTINGS_WRITE = "zone-settings.write"
     const val CACHE_PURGE = "cache.purge"
+    // 域名安全（1.3 对齐 iOS 1.4.0）。SSL/TLS 加密模式与性能开关走 zone-settings；
+    // 证书、Transform、IP 访问规则各有独立 scope。均经 [[cf-oauth-scopes]] 核对。
+    const val SSL_CERTS_READ = "ssl-and-certificates.read"
+    const val SSL_CERTS_WRITE = "ssl-and-certificates.write"
+    const val TRANSFORM_READ = "zone-transform-rules.read"
+    const val TRANSFORM_WRITE = "zone-transform-rules.write"
+    const val FIREWALL_READ = "firewall-services.read"
+    const val FIREWALL_WRITE = "firewall-services.write"
     const val ACCOUNT_ANALYTICS_READ = "account-analytics.read"
     const val ANALYTICS_READ = "analytics.read"
 
@@ -41,6 +51,7 @@ object Scopes {
         ZONE_READ, ZONE_WRITE,
         DNS_READ, DNS_WRITE,
         WORKERS_READ, WORKERS_WRITE,
+        WORKERS_ROUTES_READ, WORKERS_ROUTES_WRITE,
         WORKERS_TAIL_READ,
         SNIPPETS_READ, SNIPPETS_WRITE,
         R2_READ, R2_WRITE,
@@ -49,6 +60,9 @@ object Scopes {
         TUNNEL_READ, TUNNEL_WRITE,
         WAF_READ, WAF_WRITE,
         ZONE_SETTINGS_READ, ZONE_SETTINGS_WRITE, CACHE_PURGE,
+        SSL_CERTS_READ, SSL_CERTS_WRITE,
+        TRANSFORM_READ, TRANSFORM_WRITE,
+        FIREWALL_READ, FIREWALL_WRITE,
         ACCOUNT_ANALYTICS_READ, ANALYTICS_READ,
     )
 

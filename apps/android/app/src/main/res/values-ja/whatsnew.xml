@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">ドメインセキュリティ一式</string>
+    <string name="whatsnew_1_3_0_detail">SSL/TLS 暗号化モードとエッジ証明書、Universal SSL の切り替え、Transform Rules、IP アクセスルール、さらに HTTP/2・HTTP/3・Brotli などの性能とキャッシュ設定を追加しました。</string>
+    <string name="whatsnew_1_3_1_title">R2 の強化と URL 単位のキャッシュ削除</string>
+    <string name="whatsnew_1_3_1_detail">R2 でフォルダー閲覧、オブジェクトのコピー/移動、バケットの CORS と公開アクセス設定に対応。キャッシュ削除に「URL 単位の削除」を追加しました。</string>
+    <string name="whatsnew_1_3_2_title">ホーム ウィジェット、ライブログ、対応拡大</string>
+    <string name="whatsnew_1_3_2_detail">夜明けの「アカウント概要」ホーム ウィジェットを追加。ライブログを Live Updates（Android 16）に格上げ。ヘルプとフィードバックに診断ログを添付可能。Android 9 以降に対応しました。</string>
     <string name="whatsnew_1_1_0_title">表示から管理へ</string>
     <string name="whatsnew_1_1_0_detail">ドメインの追加、D1 データベースとトンネルの作成・削除、Worker の変数/シークレット/トリガー/ドメイン、トンネルの公開ホスト名ルートを管理できるようになりました。</string>
     <string name="whatsnew_1_0_0_title">OAuth ワンタップログイン</string>

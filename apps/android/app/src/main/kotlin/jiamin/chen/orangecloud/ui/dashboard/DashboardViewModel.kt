@@ -21,8 +21,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import androidx.glance.appwidget.updateAll
+import jiamin.chen.orangecloud.core.widget.OrangeCloudWidget
+import jiamin.chen.orangecloud.core.widget.WidgetSnapshot
+import jiamin.chen.orangecloud.core.widget.WidgetSnapshotStore
 import javax.inject.Inject
 
 data class DashboardUiState(
@@ -41,6 +49,7 @@ data class DashboardUiState(
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val accountStore: AccountStore,
     private val authRepository: AuthRepository,
     private val zoneRepository: ZoneRepository,
@@ -68,6 +77,16 @@ class DashboardViewModel @Inject constructor(
                 .flatMapLatest { id -> if (id == null) flowOf(emptyList()) else zoneRepository.observeZones(id) }
                 .collect { zones ->
                     _uiState.update { it.copy(zoneCount = zones.size.toString(), recentZones = zones.take(4)) }
+                }
+        }
+        // 桌面小组件快照：账号总览（账号名 / 今日请求 / 域名数）变化即写入并刷新 Glance。
+        viewModelScope.launch {
+            uiState
+                .map { Triple(it.accountName, it.requestsToday, it.zoneCount) }
+                .distinctUntilChanged()
+                .collect { (name, requests, zones) ->
+                    WidgetSnapshotStore.write(context, WidgetSnapshot(name, requests, zones))
+                    runCatching { OrangeCloudWidget().updateAll(context) }
                 }
         }
         refresh()

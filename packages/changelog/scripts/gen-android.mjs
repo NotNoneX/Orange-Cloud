@@ -15,7 +15,7 @@ const repo = join(here, "..", "..", "..");
 const RES = join(repo, "apps/android/app/src/main/res");
 const KT = join(repo, "apps/android/app/src/main/kotlin/jiamin/chen/orangecloud/core/whatsnew");
 
-const LOCALES = ["zh-Hans", "en", "zh-Hant", "zh-HK", "ja", "es-MX", "ko", "pt-BR", "pt-PT"];
+const LOCALES = ["zh-Hans", "en", "zh-Hant", "zh-HK", "ja", "es-MX", "ko", "pt-BR", "pt-PT", "de", "fr", "ar", "tr"];
 const DIR = {
   "zh-Hans": "values",
   en: "values-en",
@@ -26,6 +26,10 @@ const DIR = {
   ko: "values-ko",
   "pt-BR": "values-pt-rBR",
   "pt-PT": "values-pt-rPT",
+  de: "values-de",
+  fr: "values-fr",
+  ar: "values-ar",
+  tr: "values-tr",
 };
 
 const releases = JSON.parse(readFileSync(join(here, "..", "android.json"), "utf8"));

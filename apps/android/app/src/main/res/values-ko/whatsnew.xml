@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">도메인 보안 모음</string>
+    <string name="whatsnew_1_3_0_detail">SSL/TLS 암호화 모드와 엣지 인증서, Universal SSL 전환, Transform Rules, IP 접근 규칙, 그리고 HTTP/2·HTTP/3·Brotli 등 성능·캐시 설정을 추가했습니다.</string>
+    <string name="whatsnew_1_3_1_title">R2 업그레이드 및 URL 단위 캐시 제거</string>
+    <string name="whatsnew_1_3_1_detail">R2에서 폴더 탐색, 객체 복사/이동, 버킷별 CORS 및 공개 액세스 설정을 지원합니다. 캐시 제거에 ‘URL 단위 제거’가 추가되었습니다.</string>
+    <string name="whatsnew_1_3_2_title">홈 위젯, 실시간 로그 및 더 넓은 지원</string>
+    <string name="whatsnew_1_3_2_detail">여명 ‘계정 개요’ 홈 위젯 추가, 실시간 로그를 Live Updates(Android 16)로 승격, 도움말 및 피드백에 진단 로그 첨부 가능, 이제 Android 9 이상을 지원합니다.</string>
     <string name="whatsnew_1_1_0_title">보기에서 관리로</string>
     <string name="whatsnew_1_1_0_detail">이제 도메인 추가, D1 데이터베이스·터널 생성 및 삭제, Worker 변수/시크릿/트리거/도메인, 터널 공개 호스트 이름 경로를 관리할 수 있습니다.</string>
     <string name="whatsnew_1_0_0_title">OAuth 원탭 로그인</string>

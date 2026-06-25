@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">Conjunto de segurança do domínio</string>
+    <string name="whatsnew_1_3_0_detail">Novos modos de criptografia SSL/TLS e certificados de borda, alternância do Universal SSL, Transform Rules, regras de acesso por IP e controles de desempenho e cache como HTTP/2·HTTP/3·Brotli.</string>
+    <string name="whatsnew_1_3_1_title">Melhorias do R2 e limpeza por URL</string>
+    <string name="whatsnew_1_3_1_detail">O R2 agora oferece navegação por pastas, copiar/mover objetos e configurações de CORS e acesso público por bucket; a limpeza de cache ganha “limpar por URL”.</string>
+    <string name="whatsnew_1_3_2_title">Widget na tela inicial, logs ao vivo e suporte mais amplo</string>
+    <string name="whatsnew_1_3_2_detail">Novo widget de tela inicial “visão geral da conta” ao amanhecer; logs ao vivo promovidos a Live Updates (Android 16); Ajuda e feedback pode anexar um log de diagnóstico; agora compatível com Android 9 e superior.</string>
     <string name="whatsnew_1_1_0_title">De ver a gerenciar</string>
     <string name="whatsnew_1_1_0_detail">Agora você pode adicionar domínios, criar e excluir bancos de dados D1 e túneis, gerenciar variáveis/segredos/gatilhos/domínios de Workers e as rotas de nome de host público de um túnel.</string>
     <string name="whatsnew_1_0_0_title">Login OAuth com um toque</string>

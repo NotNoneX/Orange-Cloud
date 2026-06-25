@@ -1,5 +1,108 @@
 [
   {
+    "version": "1.3",
+    "date": "2026.06.25",
+    "channel": "Google Play",
+    "items": [
+      {
+        "title": {
+          "zh-Hans": "域名安全套件",
+          "en": "Domain security suite",
+          "zh-Hant": "網域安全套件",
+          "zh-HK": "域名安全套件",
+          "ja": "ドメインセキュリティ一式",
+          "es-MX": "Conjunto de seguridad del dominio",
+          "ko": "도메인 보안 모음",
+          "pt-BR": "Conjunto de segurança do domínio",
+          "pt-PT": "Conjunto de segurança do domínio",
+          "de": "Domain-Sicherheitspaket",
+          "fr": "Suite de sécurité du domaine",
+          "ar": "حزمة أمان النطاق",
+          "tr": "Alan adı güvenlik paketi"
+        },
+        "detail": {
+          "zh-Hans": "新增 SSL/TLS 加密模式与边缘证书、Universal SSL 开关、Transform Rules、IP 访问规则，以及 HTTP/2·HTTP/3·Brotli 等性能与缓存开关。",
+          "en": "New SSL/TLS encryption modes and edge certificates, Universal SSL toggle, Transform Rules, IP access rules, plus HTTP/2·HTTP/3·Brotli and other performance and cache controls.",
+          "zh-Hant": "新增 SSL/TLS 加密模式與邊緣憑證、Universal SSL 開關、Transform Rules、IP 存取規則，以及 HTTP/2·HTTP/3·Brotli 等效能與快取開關。",
+          "zh-HK": "新增 SSL/TLS 加密模式與邊緣憑證、Universal SSL 開關、Transform Rules、IP 存取規則，以及 HTTP/2·HTTP/3·Brotli 等效能與緩存開關。",
+          "ja": "SSL/TLS 暗号化モードとエッジ証明書、Universal SSL の切り替え、Transform Rules、IP アクセスルール、さらに HTTP/2・HTTP/3・Brotli などの性能とキャッシュ設定を追加しました。",
+          "es-MX": "Nuevos modos de cifrado SSL/TLS y certificados perimetrales, interruptor de Universal SSL, Transform Rules, reglas de acceso por IP y controles de rendimiento y caché como HTTP/2·HTTP/3·Brotli.",
+          "ko": "SSL/TLS 암호화 모드와 엣지 인증서, Universal SSL 전환, Transform Rules, IP 접근 규칙, 그리고 HTTP/2·HTTP/3·Brotli 등 성능·캐시 설정을 추가했습니다.",
+          "pt-BR": "Novos modos de criptografia SSL/TLS e certificados de borda, alternância do Universal SSL, Transform Rules, regras de acesso por IP e controles de desempenho e cache como HTTP/2·HTTP/3·Brotli.",
+          "pt-PT": "Novos modos de encriptação SSL/TLS e certificados de extremidade, alternância do Universal SSL, Transform Rules, regras de acesso por IP e controlos de desempenho e cache como HTTP/2·HTTP/3·Brotli.",
+          "de": "Neue SSL/TLS-Verschlüsselungsmodi und Edge-Zertifikate, Universal-SSL-Schalter, Transform Rules, IP-Zugriffsregeln sowie HTTP/2·HTTP/3·Brotli und weitere Leistungs- und Cache-Einstellungen.",
+          "fr": "Nouveaux modes de chiffrement SSL/TLS et certificats edge, bascule Universal SSL, Transform Rules, règles d’accès IP, ainsi que HTTP/2·HTTP/3·Brotli et d’autres contrôles de performance et de cache.",
+          "ar": "أوضاع تشفير SSL/TLS جديدة وشهادات طرفية، ومفتاح Universal SSL، وTransform Rules، وقواعد الوصول حسب IP، إضافةً إلى HTTP/2·HTTP/3·Brotli وعناصر تحكم أخرى للأداء والتخزين المؤقت.",
+          "tr": "Yeni SSL/TLS şifreleme modları ve uç sertifikalar, Universal SSL anahtarı, Transform Rules, IP erişim kuralları ve ayrıca HTTP/2·HTTP/3·Brotli ile diğer performans ve önbellek denetimleri."
+        }
+      },
+      {
+        "title": {
+          "zh-Hans": "R2 升级与按 URL 清缓存",
+          "en": "R2 upgrade & purge by URL",
+          "zh-Hant": "R2 升級與依 URL 清快取",
+          "zh-HK": "R2 升級與依 URL 清緩存",
+          "ja": "R2 の強化と URL 単位のキャッシュ削除",
+          "es-MX": "Mejoras de R2 y purga por URL",
+          "ko": "R2 업그레이드 및 URL 단위 캐시 제거",
+          "pt-BR": "Melhorias do R2 e limpeza por URL",
+          "pt-PT": "Melhorias do R2 e limpeza por URL",
+          "de": "R2-Upgrade & Leeren per URL",
+          "fr": "Améliorations R2 & purge par URL",
+          "ar": "تحسينات R2 والمسح حسب URL",
+          "tr": "R2 yükseltmesi ve URL’ye göre temizleme"
+        },
+        "detail": {
+          "zh-Hans": "R2 支持文件夹浏览、对象复制/移动、桶的 CORS 与公开访问设置；缓存清理新增「按 URL 清理」。",
+          "en": "R2 now supports folder browsing, object copy/move, and per-bucket CORS and public access settings; cache purge adds “purge by URL”.",
+          "zh-Hant": "R2 支援資料夾瀏覽、物件複製/移動、儲存桶的 CORS 與公開存取設定；快取清理新增「依 URL 清理」。",
+          "zh-HK": "R2 支援資料夾瀏覽、物件複製/移動、儲存桶的 CORS 與公開存取設定；緩存清理新增「依 URL 清理」。",
+          "ja": "R2 でフォルダー閲覧、オブジェクトのコピー/移動、バケットの CORS と公開アクセス設定に対応。キャッシュ削除に「URL 単位の削除」を追加しました。",
+          "es-MX": "R2 ahora admite navegación por carpetas, copiar/mover objetos y ajustes de CORS y acceso público por bucket; la purga de caché añade “purgar por URL”.",
+          "ko": "R2에서 폴더 탐색, 객체 복사/이동, 버킷별 CORS 및 공개 액세스 설정을 지원합니다. 캐시 제거에 ‘URL 단위 제거’가 추가되었습니다.",
+          "pt-BR": "O R2 agora oferece navegação por pastas, copiar/mover objetos e configurações de CORS e acesso público por bucket; a limpeza de cache ganha “limpar por URL”.",
+          "pt-PT": "O R2 agora oferece navegação por pastas, copiar/mover objetos e definições de CORS e acesso público por bucket; a limpeza de cache ganha “limpar por URL”.",
+          "de": "R2 unterstützt jetzt Ordnernavigation, Objekt-Kopieren/-Verschieben sowie CORS- und Öffentlich-Zugriffseinstellungen pro Bucket; das Cache-Leeren erhält „Leeren per URL“.",
+          "fr": "R2 prend désormais en charge la navigation par dossiers, le copier/déplacer d’objets, ainsi que les paramètres CORS et d’accès public par bucket ; la purge du cache ajoute « purge par URL ».",
+          "ar": "يدعم R2 الآن تصفح المجلدات ونسخ/نقل الكائنات وإعدادات CORS والوصول العام لكل حاوية؛ ويضيف مسح الذاكرة المؤقتة ”المسح حسب URL“.",
+          "tr": "R2 artık klasör gezinme, nesne kopyalama/taşıma ve bucket başına CORS ve genel erişim ayarlarını destekliyor; önbellek temizlemeye “URL’ye göre temizleme” eklendi."
+        }
+      },
+      {
+        "title": {
+          "zh-Hans": "桌面小组件、实况日志与更广兼容",
+          "en": "Home widget, live logs & wider support",
+          "zh-Hant": "桌面小工具、即時日誌與更廣相容",
+          "zh-HK": "桌面小工具、即時日誌與更廣相容",
+          "ja": "ホーム ウィジェット、ライブログ、対応拡大",
+          "es-MX": "Widget de inicio, registros en vivo y mayor compatibilidad",
+          "ko": "홈 위젯, 실시간 로그 및 더 넓은 지원",
+          "pt-BR": "Widget na tela inicial, logs ao vivo e suporte mais amplo",
+          "pt-PT": "Widget no ecrã inicial, registos ao vivo e suporte mais amplo",
+          "de": "Homescreen-Widget, Echtzeit-Logs & breitere Unterstützung",
+          "fr": "Widget d’accueil, journaux en direct & support élargi",
+          "ar": "أداة الشاشة الرئيسية والسجلات الحية ودعم أوسع",
+          "tr": "Ana ekran widget’ı, canlı günlükler ve daha geniş destek"
+        },
+        "detail": {
+          "zh-Hans": "新增晨昏「账号总览」桌面小组件；实时日志升级为实况通知（Android 16）；「帮助与反馈」可附带诊断日志；现已兼容 Android 9 及以上。",
+          "en": "A new daybreak “account overview” home widget; live tail logs are promoted to Live Updates (Android 16); Help & Feedback can attach a diagnostic log; now supports Android 9 and above.",
+          "zh-Hant": "新增晨昏「帳戶總覽」桌面小工具；即時日誌升級為實況通知（Android 16）；「說明與意見回饋」可附帶診斷日誌；現已相容 Android 9 以上。",
+          "zh-HK": "新增晨昏「帳戶總覽」桌面小工具；即時日誌升級為實況通知（Android 16）；「說明與意見回饋」可附帶診斷日誌；現已相容 Android 9 以上。",
+          "ja": "夜明けの「アカウント概要」ホーム ウィジェットを追加。ライブログを Live Updates（Android 16）に格上げ。ヘルプとフィードバックに診断ログを添付可能。Android 9 以降に対応しました。",
+          "es-MX": "Nuevo widget de inicio “resumen de la cuenta” al amanecer; los registros en vivo se promueven a Live Updates (Android 16); Ayuda y comentarios puede adjuntar un registro de diagnóstico; ahora compatible con Android 9 y posteriores.",
+          "ko": "여명 ‘계정 개요’ 홈 위젯 추가, 실시간 로그를 Live Updates(Android 16)로 승격, 도움말 및 피드백에 진단 로그 첨부 가능, 이제 Android 9 이상을 지원합니다.",
+          "pt-BR": "Novo widget de tela inicial “visão geral da conta” ao amanhecer; logs ao vivo promovidos a Live Updates (Android 16); Ajuda e feedback pode anexar um log de diagnóstico; agora compatível com Android 9 e superior.",
+          "pt-PT": "Novo widget de ecrã inicial “visão geral da conta” ao amanhecer; registos ao vivo promovidos a Live Updates (Android 16); Ajuda e feedback pode anexar um registo de diagnóstico; agora compatível com Android 9 e superior.",
+          "de": "Ein neues Dämmerungs-Widget „Kontoübersicht“; Echtzeit-Logs werden zu Live Updates (Android 16) hochgestuft; Hilfe & Feedback kann ein Diagnoseprotokoll anhängen; unterstützt jetzt Android 9 und höher.",
+          "fr": "Un nouveau widget d’accueil « aperçu du compte » à l’aube ; les journaux en direct sont promus en Live Updates (Android 16) ; Aide & retours peut joindre un journal de diagnostic ; prend désormais en charge Android 9 et plus.",
+          "ar": "أداة شاشة رئيسية جديدة ”نظرة عامة على الحساب“ عند الفجر؛ تُرقّى السجلات الحية إلى Live Updates (أندرويد 16)؛ ويمكن لميزة ”المساعدة والملاحظات“ إرفاق سجل تشخيصي؛ ويدعم الآن أندرويد 9 وأحدث.",
+          "tr": "Yeni bir şafak vakti “hesap özeti” ana ekran widget’ı; canlı günlükler Live Updates’e (Android 16) yükseltildi; Yardım ve geri bildirim bir tanılama günlüğü ekleyebilir; artık Android 9 ve üzerini destekliyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.1",
     "date": "2026.06.18",
     "channel": "Google Play",

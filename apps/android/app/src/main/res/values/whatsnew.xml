@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_3_0_title">域名安全套件</string>
+    <string name="whatsnew_1_3_0_detail">新增 SSL/TLS 加密模式与边缘证书、Universal SSL 开关、Transform Rules、IP 访问规则，以及 HTTP/2·HTTP/3·Brotli 等性能与缓存开关。</string>
+    <string name="whatsnew_1_3_1_title">R2 升级与按 URL 清缓存</string>
+    <string name="whatsnew_1_3_1_detail">R2 支持文件夹浏览、对象复制/移动、桶的 CORS 与公开访问设置；缓存清理新增「按 URL 清理」。</string>
+    <string name="whatsnew_1_3_2_title">桌面小组件、实况日志与更广兼容</string>
+    <string name="whatsnew_1_3_2_detail">新增晨昏「账号总览」桌面小组件；实时日志升级为实况通知（Android 16）；「帮助与反馈」可附带诊断日志；现已兼容 Android 9 及以上。</string>
     <string name="whatsnew_1_1_0_title">从查看到管理</string>
     <string name="whatsnew_1_1_0_detail">现在可以添加域名、新建并删除 D1 数据库与隧道，管理 Worker 变量/密钥/触发器/域名，以及隧道的公共主机名路由。</string>
     <string name="whatsnew_1_0_0_title">OAuth 一键登录</string>

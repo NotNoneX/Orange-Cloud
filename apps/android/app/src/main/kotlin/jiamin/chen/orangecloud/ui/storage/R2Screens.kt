@@ -25,11 +25,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Upload
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -109,6 +115,7 @@ fun R2BucketListScreen(
 @Composable
 fun R2ObjectListScreen(
     onBack: () -> Unit,
+    onOpenSettings: () -> Unit,
     viewModel: R2ObjectListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -119,15 +126,23 @@ fun R2ObjectListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var detailObject by remember { mutableStateOf<R2Object?>(null) }
 
+    var copyMoveTarget by remember { mutableStateOf<R2Object?>(null) }
+
     val uploadedMsg = stringResource(R.string.r2_uploaded)
     val deletedMsg = stringResource(R.string.r2_deleted)
     val noAppMsg = stringResource(R.string.r2_no_app)
+    val copiedMsg = stringResource(R.string.r2_copied)
+    val movedMsg = stringResource(R.string.r2_moved)
+    val verifyFailMsg = stringResource(R.string.r2_move_verify_fail)
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 R2Event.Uploaded -> snackbarHostState.showSnackbar(uploadedMsg)
                 R2Event.Deleted -> { detailObject = null; snackbarHostState.showSnackbar(deletedMsg) }
+                R2Event.Copied -> { copyMoveTarget = null; snackbarHostState.showSnackbar(copiedMsg) }
+                R2Event.Moved -> { copyMoveTarget = null; snackbarHostState.showSnackbar(movedMsg) }
+                R2Event.MoveVerifyFailed -> snackbarHostState.showSnackbar(verifyFailMsg)
                 is R2Event.Error -> snackbarHostState.showSnackbar(event.message ?: noAppMsg)
             }
         }
@@ -188,27 +203,41 @@ fun R2ObjectListScreen(
                     backDescription = stringResource(R.string.common_back),
                     refreshDescription = stringResource(R.string.common_refresh),
                 )
+                val isEmptyRoot = state.objects.isEmpty() && state.folders.isEmpty() && state.prefix.isEmpty()
                 when {
                     state.missingScope ->
                         SkyEmptyState(Icons.Outlined.Lock, stringResource(R.string.scope_missing), onSky, stringResource(R.string.common_refresh)) { viewModel.loadFirst() }
 
-                    state.objects.isEmpty() && state.isLoading ->
+                    isEmptyRoot && state.isLoading ->
                         Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator(color = onSky) }
 
-                    state.objects.isEmpty() && state.hasError ->
+                    isEmptyRoot && state.hasError ->
                         SkyEmptyState(Icons.AutoMirrored.Outlined.InsertDriveFile, stringResource(R.string.error_generic), onSky, stringResource(R.string.common_refresh)) { viewModel.loadFirst() }
 
-                    state.objects.isEmpty() ->
+                    isEmptyRoot ->
                         SkyEmptyState(Icons.AutoMirrored.Outlined.InsertDriveFile, stringResource(R.string.r2_objects_empty), onSky, stringResource(R.string.common_refresh)) { viewModel.loadFirst() }
 
                     else -> LazyColumn(
                         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
+                        if (state.prefix.isEmpty()) {
+                            item {
+                                StorageRow(Icons.Outlined.Settings, stringResource(R.string.r2_bucket_settings), null, onClick = onOpenSettings)
+                            }
+                        }
+                        if (state.prefix.isNotEmpty()) {
+                            item {
+                                StorageRow(Icons.Outlined.Folder, "..", stringResource(R.string.r2_folder_up), onClick = { viewModel.navigateUp() })
+                            }
+                        }
+                        items(state.folders, key = { "dir:" + it.prefix }) { folder ->
+                            StorageRow(Icons.Outlined.Folder, folder.name, stringResource(R.string.r2_folder), onClick = { viewModel.navigateInto(folder) })
+                        }
                         items(state.objects, key = { it.key }) { obj ->
                             StorageRow(
                                 Icons.AutoMirrored.Outlined.InsertDriveFile,
-                                obj.key,
+                                obj.key.removePrefix(state.prefix),
                                 obj.size?.let { formatBytes(it) },
                                 onClick = { detailObject = obj },
                             )
@@ -256,10 +285,66 @@ fun R2ObjectListScreen(
                 canWrite = state.canWrite,
                 isDownloading = state.isDownloading,
                 onOpen = { openObject(obj) },
+                onCopyMove = { detailObject = null; copyMoveTarget = obj },
                 onDelete = { viewModel.delete(obj.key) },
             )
         }
     }
+
+    copyMoveTarget?.let { obj ->
+        CopyMoveDialog(
+            obj = obj,
+            isCopying = state.isCopying,
+            progress = state.copyProgress,
+            onDismiss = { if (!state.isCopying) copyMoveTarget = null },
+            onConfirm = { destKey, isMove ->
+                viewModel.copyOrMove(obj.key, destKey, obj.httpMetadata?.contentType ?: "application/octet-stream", isMove)
+            },
+        )
+    }
+}
+
+@Composable
+private fun CopyMoveDialog(
+    obj: R2Object,
+    isCopying: Boolean,
+    progress: Float,
+    onDismiss: () -> Unit,
+    onConfirm: (destKey: String, isMove: Boolean) -> Unit,
+) {
+    var dest by remember { mutableStateOf(obj.key) }
+    val valid = dest.isNotBlank() && dest != obj.key
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.r2_copy_move)) },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = dest,
+                    onValueChange = { dest = it },
+                    label = { Text(stringResource(R.string.r2_dest_key)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    enabled = !isCopying,
+                )
+                if (isCopying) {
+                    Spacer(Modifier.height(12.dp))
+                    LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+                }
+            }
+        },
+        confirmButton = {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(onClick = { onConfirm(dest.trim(), false) }, enabled = valid && !isCopying) {
+                    Text(stringResource(R.string.r2_copy))
+                }
+                TextButton(onClick = { onConfirm(dest.trim(), true) }, enabled = valid && !isCopying) {
+                    Text(stringResource(R.string.r2_move))
+                }
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss, enabled = !isCopying) { Text(stringResource(R.string.common_cancel)) } },
+    )
 }
 
 @Composable
@@ -268,6 +353,7 @@ private fun ObjectDetail(
     canWrite: Boolean,
     isDownloading: Boolean,
     onOpen: () -> Unit,
+    onCopyMove: () -> Unit,
     onDelete: () -> Unit,
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
@@ -306,6 +392,14 @@ private fun ObjectDetail(
             }
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.r2_download_open))
+        }
+
+        if (canWrite) {
+            OutlinedButton(onClick = onCopyMove, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.height(18.dp).width(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(stringResource(R.string.r2_copy_move))
+            }
         }
 
         if (canWrite) {

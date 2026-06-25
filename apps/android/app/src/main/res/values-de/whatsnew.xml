@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
+<resources>
+    <string name="whatsnew_1_3_0_title">Domain-Sicherheitspaket</string>
+    <string name="whatsnew_1_3_0_detail">Neue SSL/TLS-Verschlüsselungsmodi und Edge-Zertifikate, Universal-SSL-Schalter, Transform Rules, IP-Zugriffsregeln sowie HTTP/2·HTTP/3·Brotli und weitere Leistungs- und Cache-Einstellungen.</string>
+    <string name="whatsnew_1_3_1_title">R2-Upgrade &amp; Leeren per URL</string>
+    <string name="whatsnew_1_3_1_detail">R2 unterstützt jetzt Ordnernavigation, Objekt-Kopieren/-Verschieben sowie CORS- und Öffentlich-Zugriffseinstellungen pro Bucket; das Cache-Leeren erhält „Leeren per URL“.</string>
+    <string name="whatsnew_1_3_2_title">Homescreen-Widget, Echtzeit-Logs &amp; breitere Unterstützung</string>
+    <string name="whatsnew_1_3_2_detail">Ein neues Dämmerungs-Widget „Kontoübersicht“; Echtzeit-Logs werden zu Live Updates (Android 16) hochgestuft; Hilfe &amp; Feedback kann ein Diagnoseprotokoll anhängen; unterstützt jetzt Android 9 und höher.</string>
+    <string name="whatsnew_1_1_0_title">From viewing to managing</string>
+    <string name="whatsnew_1_1_0_detail">You can now add domains, create and delete D1 databases and tunnels, manage Worker variables/secrets/triggers/domains, and a tunnel’s public hostname routes.</string>
+    <string name="whatsnew_1_0_0_title">One-tap OAuth sign-in</string>
+    <string name="whatsnew_1_0_0_detail">Sign in with Cloudflare\'s official authorization — no API tokens to paste.</string>
+    <string name="whatsnew_1_0_1_title">Domains · Workers · Storage</string>
+    <string name="whatsnew_1_0_1_detail">DNS, analytics, WAF, Snippets, Workers live logs, and R2/D1/KV storage — all in one place.</string>
+</resources>
