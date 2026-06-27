@@ -19,6 +19,11 @@ final class ZoneAnalyticsViewModel {
     private(set) var points: [TrafficDataPoint] = []
     private(set) var previousPoints: [TrafficDataPoint] = []
 
+    // 全球流量地图：按国家/地区聚合，独立加载（仅 Pro 触发），与主时间序列分离
+    var isLoadingCountries = false
+    private(set) var countries: [CountryTraffic] = []
+    private var countryCache: [AnalyticsTimeRange: [CountryTraffic]] = [:]
+
     private var cache: [AnalyticsTimeRange: (current: [TrafficDataPoint], previous: [TrafficDataPoint])] = [:]
     private let analyticsService: AnalyticsService
     private let zoneId: String
@@ -95,9 +100,78 @@ final class ZoneAnalyticsViewModel {
         isLoading = false
     }
 
+    /// 全球流量地图数据（Pro）。地图卡 .task 调用；当前范围已有缓存则直接复用。
+    /// 失败仅置空，不写主 error（地图是看板级增强，不应打断主分析区）。
+    func loadCountries(force: Bool = false) async {
+        if !force, let cached = countryCache[selectedRange] {
+            countries = cached
+            return
+        }
+        isLoadingCountries = true
+        do {
+            let result = try await analyticsService.zoneCountryTraffic(zoneId: zoneId, range: selectedRange)
+            countryCache[selectedRange] = result
+            countries = result
+        } catch {
+            countries = []
+        }
+        isLoadingCountries = false
+    }
+
     /// 下拉刷新：清空缓存重新拉取
     func refresh() async {
         cache.removeAll()
+        countryCache.removeAll()
+        clearInsight()
         await load(force: true)
+    }
+
+    // MARK: - 设备端 AI 摘要（只读，Pro）
+
+    var isSummarizing = false
+    var summaryError: String?
+    private(set) var insight: TrafficInsight?
+
+    /// 换时间范围 / 刷新时清空旧摘要，避免摘要与当前数据对不上。
+    func clearInsight() {
+        insight = nil
+        summaryError = nil
+    }
+
+    /// 在设备上把当前所选范围的数据读成一句话要点 + 几条亮点。
+    func generateInsight(locale: Locale = .current) async {
+        guard !isSummarizing, !points.isEmpty else { return }
+        isSummarizing = true
+        summaryError = nil
+        defer { isSummarizing = false }
+        // 摘要要提及主要来源，惰性补齐国家维度（Pro 才会走到这里）
+        if countries.isEmpty { await loadCountries() }
+        do {
+            insight = try await AnalyticsAssistant.summarize(makeSummaryInput(), locale: locale)
+        } catch {
+            summaryError = error.localizedDescription
+        }
+    }
+
+    /// 从既有聚合值拼出确定性事实集——模型只接触这里的数字。
+    private func makeSummaryInput() -> TrafficSummaryInput {
+        let top = countries
+            .sorted { $0.requests > $1.requests }
+            .prefix(5)
+            .map { TrafficSummaryInput.TopCountry(name: $0.displayName, requests: $0.requests, threats: $0.threats) }
+        return TrafficSummaryInput(
+            periodLabel:     selectedRange.periodLabel,
+            totalRequests:   totalRequests,
+            requestsTrend:   requestsTrend,
+            totalBytes:      totalBytes,
+            bytesTrend:      bytesTrend,
+            totalThreats:    totalThreats,
+            threatsTrend:    threatsTrend,
+            totalUniques:    totalUniques,
+            uniquesTrend:    uniquesTrend,
+            cacheHitRate:    cacheHitRate,
+            cacheHitTrendPt: cacheHitTrendPt,
+            topCountries:    Array(top)
+        )
     }
 }

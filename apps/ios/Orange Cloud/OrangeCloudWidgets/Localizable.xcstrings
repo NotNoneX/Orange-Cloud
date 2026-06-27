@@ -1,82 +1,6 @@
 {
   "sourceLanguage" : "zh-Hans",
   "strings" : {
-    "账户级用量不可用" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "استخدام الحساب غير متاح"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kontonutzung nicht verfügbar"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Account usage unavailable"
-          }
-        },
-        "es-MX" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uso de la cuenta no disponible"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utilisation du compte indisponible"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アカウント使用量は利用できません"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "계정 사용량을 사용할 수 없음"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uso da conta indisponível"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utilização da conta indisponível"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hesap kullanımı yok"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "帳戶級用量不可用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "帳戶級用量不可用"
-          }
-        }
-      }
-    },
     "—" : {
 
     },
@@ -157,13 +81,13 @@
             "value" : "%@ kullanımı"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 用量"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 用量"
@@ -233,13 +157,13 @@
             "value" : "%@ istek"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 請求"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 請求"
@@ -315,13 +239,13 @@
             "value" : "%lld olay"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 個事件"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 個事件"
@@ -334,24 +258,6 @@
         "ar" : {
           "variations" : {
             "plural" : {
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld نطاق"
-                }
-              },
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "نطاق واحد"
-                }
-              },
-              "two" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "نطاقان"
-                }
-              },
               "few" : {
                 "stringUnit" : {
                   "state" : "translated",
@@ -364,7 +270,25 @@
                   "value" : "%lld نطاقًا"
                 }
               },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "نطاق واحد"
+                }
+              },
               "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld نطاق"
+                }
+              },
+              "two" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "نطاقان"
+                }
+              },
+              "zero" : {
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld نطاق"
@@ -511,16 +435,16 @@
             }
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld 域名"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 網域"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 域名"
           }
         }
       }
@@ -587,13 +511,13 @@
             "value" : "%lld etkin"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 活躍"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld 活躍"
@@ -666,13 +590,13 @@
             "value" : "%lld/%lld etkin · 24 sa"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld/%lld 活躍 · 24h"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld/%lld 活躍 · 24h"
@@ -745,13 +669,13 @@
             "value" : "A sınıfı işlemler · Bu dönem"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "A 類操作 · 本週期"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "A 類操作 · 本週期"
@@ -821,13 +745,13 @@
             "value" : "A sınıfı işlemler · Bu ay"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "A 類操作 · 本月"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "A 類操作 · 本月"
@@ -897,13 +821,13 @@
             "value" : "B sınıfı işlemler · Bu dönem"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "B 類操作 · 本週期"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "B 類操作 · 本週期"
@@ -973,13 +897,13 @@
             "value" : "B sınıfı işlemler · Bu ay"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "B 類操作 · 本月"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "B 類操作 · 本月"
@@ -1049,13 +973,13 @@
             "value" : "CPU · Bugün"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CPU · 今日"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CPU · 今日"
@@ -1128,13 +1052,13 @@
             "value" : "Workers, R2, D1 ve KV için kota kullanımı. Bir hizmet seçin."
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Workers / R2 / D1 / KV 的額度使用情況，可按服務選擇"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Workers / R2 / D1 / KV 的額度使用情況，可按服務選擇"
@@ -1204,13 +1128,13 @@
             "value" : "Bugün"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "今日"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "今日"
@@ -1280,13 +1204,13 @@
             "value" : "Bugün · Bu dönem"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "今日 · 本帳期"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "今日 · 本帳期"
@@ -1295,6 +1219,7 @@
       }
     },
     "全账号 24 小时请求与域名运行状态" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -1356,16 +1281,16 @@
             "value" : "Tüm hesaplarda 24 saatlik istekler ve alan adı durumu"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "全帳戶 24 小時請求與域名運作狀態"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "全帳號 24 小時請求與網域運作狀態"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全帳戶 24 小時請求與域名運作狀態"
           }
         }
       }
@@ -1432,13 +1357,13 @@
             "value" : "Yazmalar · %@"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入 · %@"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入 · %@"
@@ -1508,13 +1433,13 @@
             "value" : "Yazmalar · Bugün"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入 · 今日"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入 · 今日"
@@ -1584,16 +1509,16 @@
             "value" : "Bir alan adının 24 saatlik metriği. İstekleri, bant genişliğini, tehditleri veya ziyaretçileri seçin."
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "單一域名的 24h 指標，可選請求/頻寬/威脅/訪客"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "單一網域的 24h 指標，可選請求/頻寬/威脅/訪客"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "單一域名的 24h 指標，可選請求/頻寬/威脅/訪客"
           }
         }
       }
@@ -1660,13 +1585,13 @@
             "value" : "İsabet oranı"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "命中率"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "命中率"
@@ -1736,16 +1661,16 @@
             "value" : "Alan adları"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "域名"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "網域"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "域名"
           }
         }
       }
@@ -1812,16 +1737,16 @@
             "value" : "Bir alan adının 24 saatlik istek arazisi. Büyük boyut isabet oranı ve metrik genel görünümü ekler."
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "域名 24h 請求地形；大尺寸含命中率與多指標總覽"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "網域 24h 請求地形；大尺寸含命中率與多指標總覽"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "域名 24h 請求地形；大尺寸含命中率與多指標總覽"
           }
         }
       }
@@ -1888,16 +1813,16 @@
             "value" : "Alan adı metriği"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "域名指標"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "網域指標"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "域名指標"
           }
         }
       }
@@ -1964,13 +1889,13 @@
             "value" : "Tehditler"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "威脅"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "威脅"
@@ -2040,13 +1965,13 @@
             "value" : "Depolama"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存"
@@ -2116,16 +2041,16 @@
             "value" : "Bir alan adı için tek bir 24 saatlik metriği gösterir"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示某個域名的單項 24h 指標"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示某個網域的單項 24h 指標"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示某個域名的單項 24h 指標"
           }
         }
       }
@@ -2192,16 +2117,16 @@
             "value" : "Bir alan adının istek arazisini ve genel görünümünü gösterir"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示某個域名的請求地形與總覽"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示某個網域的請求地形與總覽"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示某個域名的請求地形與總覽"
           }
         }
       }
@@ -2268,16 +2193,92 @@
             "value" : "Bir hizmetin kota kullanımını gösterir"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示某個服務的額度使用情況"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示某個服務的額度使用情況"
+          }
+        }
+      }
+    },
+    "展示某个账号的 24 小时请求与域名状态" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يعرض طلبات حساب معيّن وحالة نطاقاته خلال 24 ساعة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt Anfragen und Domain-Status eines Kontos der letzten 24 Stunden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows an account’s 24-hour requests and domain status"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra las solicitudes y el estado de dominios de una cuenta en 24 h"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affiche les requêtes et l’état des domaines d’un compte sur 24 h"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あるアカウントの 24 時間のリクエストとドメインの状態を表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "특정 계정의 24시간 요청과 도메인 상태를 표시"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra as solicitações e o status dos domínios de uma conta em 24 h"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra os pedidos e o estado dos domínios de uma conta em 24 h"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir hesabın son 24 saatteki isteklerini ve alan adı durumunu gösterir"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示某個帳戶的 24 小時請求與網域狀態"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示某個帳戶的 24 小時請求與域名狀態"
           }
         }
       }
@@ -2344,16 +2345,92 @@
             "value" : "Engellenen tehditler · 24 sa"
           }
         },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已封鎖威脅 · 24h"
+          }
+        },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "已攔截威脅 · 24h"
           }
+        }
+      }
+    },
+    "已暂停" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متوقف مؤقتًا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En pausa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En pause"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일시 중지됨"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausado"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausado"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duraklatıldı"
+          }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已封鎖威脅 · 24h"
+            "value" : "已暫停"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已暫停"
           }
         }
       }
@@ -2420,13 +2497,13 @@
             "value" : "Bant genişliği"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "頻寬"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "頻寬"
@@ -2496,13 +2573,13 @@
             "value" : "Bant genişliği · 24 sa"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "頻寬 · 24h"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "頻寬 · 24h"
@@ -2572,13 +2649,13 @@
             "value" : "Cloudflare yönetimini hızlıca aç"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "快速開啟 Cloudflare 管理"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "快速開啟 Cloudflare 管理"
@@ -2648,13 +2725,13 @@
             "value" : "Toplam istek · Son 24 saat"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "總請求 · 過去 24 小時"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "總請求 · 過去 24 小時"
@@ -2724,16 +2801,16 @@
             "value" : "Verileri eşitlemek için uygulamayı aç"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "開啟 App 同步數據"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 App 同步資料"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開啟 App 同步數據"
           }
         }
       }
@@ -2800,13 +2877,13 @@
             "value" : "Kullanımı eşitlemek için uygulamayı aç"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 App 同步用量"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 App 同步用量"
@@ -2876,13 +2953,13 @@
             "value" : "Orange Cloud’u aç"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 Orange Cloud"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 Orange Cloud"
@@ -2952,16 +3029,16 @@
             "value" : "Engellenen"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "攔截"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "封鎖"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "攔截"
           }
         }
       }
@@ -3028,16 +3105,16 @@
             "value" : "Engellenen tehditler"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "攔截威脅"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "封鎖威脅"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "攔截威脅"
           }
         }
       }
@@ -3104,13 +3181,13 @@
             "value" : "Metrik"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "指標"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "指標"
@@ -3180,16 +3257,16 @@
             "value" : "%@ için henüz veri yok"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暫無 %@ 數據"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "暫無 %@ 資料"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫無 %@ 數據"
           }
         }
       }
@@ -3256,16 +3333,16 @@
             "value" : "%@ için henüz veri yok\nYenilemek için uygulamayı aç"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暫無 %@ 數據\n開啟 App 重新整理"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "暫無 %@ 資料\n開啟 App 重新整理"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫無 %@ 數據\n開啟 App 重新整理"
           }
         }
       }
@@ -3332,16 +3409,16 @@
             "value" : "%@ için henüz kullanım verisi yok"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暫無 %@ 用量數據"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "暫無 %@ 用量資料"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫無 %@ 用量數據"
           }
         }
       }
@@ -3408,16 +3485,16 @@
             "value" : "%@ için henüz kullanım verisi yok\nYenilemek için uygulamayı aç"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暫無 %@ 用量數據\n開啟 App 重新整理"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "暫無 %@ 用量資料\n開啟 App 重新整理"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫無 %@ 用量數據\n開啟 App 重新整理"
           }
         }
       }
@@ -3484,13 +3561,13 @@
             "value" : "Güncelleme: %@"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新於 %@"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新於 %@"
@@ -3560,13 +3637,13 @@
             "value" : "Hizmet"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "服務"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "服務"
@@ -3636,13 +3713,13 @@
             "value" : "Yerel saat"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "本地時間"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "本地時間"
@@ -3712,16 +3789,92 @@
             "value" : "Bu ay"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "本月"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "本月"
+          }
+        }
+      }
+    },
+    "某个账号 24 小时请求与域名运行状态，长按可选择账号" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "طلبات حساب معيّن وحالة تشغيل نطاقاته خلال 24 ساعة، اضغط مطولاً لاختيار حساب"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anfragen und Domain-Status eines Kontos der letzten 24 Stunden; zum Auswählen eines Kontos lange drücken"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An account’s 24-hour requests and domain status; long-press to choose an account"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solicitudes y estado de dominios de una cuenta en 24 h; mantén pulsado para elegir una cuenta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requêtes et état des domaines d’un compte sur 24 h ; appui long pour choisir un compte"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あるアカウントの 24 時間のリクエストとドメインの稼働状態。長押しでアカウントを選択できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "특정 계정의 24시간 요청과 도메인 운영 상태입니다. 길게 눌러 계정을 선택할 수 있습니다"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solicitações e status dos domínios de uma conta em 24 h; toque e segure para escolher uma conta"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pedidos e estado dos domínios de uma conta em 24 h; toque sem soltar para escolher uma conta"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir hesabın son 24 saatteki istekleri ve alan adı çalışma durumu; hesap seçmek için uzun basın"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "某個帳戶的 24 小時請求與網域運行狀態，長按可選擇帳戶"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "某個帳戶的 24 小時請求與域名運行狀態，長按可選擇帳戶"
           }
         }
       }
@@ -3788,16 +3941,16 @@
             "value" : "Canlı günlükler dinleniyor…"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在監聽即時日誌…"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在監聽即時記錄…"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在監聽即時日誌…"
           }
         }
       }
@@ -3864,16 +4017,16 @@
             "value" : "Etkin alan adları"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "活躍域名"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "活躍網域"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "活躍域名"
           }
         }
       }
@@ -3940,13 +4093,13 @@
             "value" : "Benzersiz ziyaretçiler"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "獨立訪客"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "獨立訪客"
@@ -4016,13 +4169,13 @@
             "value" : "Benzersiz ziyaretçiler · 24 sa"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "獨立訪客 · 24h"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "獨立訪客 · 24h"
@@ -4092,13 +4245,13 @@
             "value" : "Olaylar bekleniyor…"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "等待事件…"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "等待事件…"
@@ -4168,16 +4321,16 @@
             "value" : "Yazılan satır · %@"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "寫入行 · %@"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入列 · %@"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "寫入行 · %@"
           }
         }
       }
@@ -4244,16 +4397,16 @@
             "value" : "Yazılan satır · Bugün"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "寫入行 · 今日"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "寫入列 · 今日"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "寫入行 · 今日"
           }
         }
       }
@@ -4320,16 +4473,16 @@
             "value" : "Okunan satır · %@"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "讀取行 · %@"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取列 · %@"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讀取行 · %@"
           }
         }
       }
@@ -4396,16 +4549,16 @@
             "value" : "Okunan satır · Bugün"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "讀取行 · 今日"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取列 · 今日"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "讀取行 · 今日"
           }
         }
       }
@@ -4472,13 +4625,13 @@
             "value" : "Ziyaretçiler"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "訪客"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "訪客"
@@ -4548,13 +4701,13 @@
             "value" : "İstekler"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求"
@@ -4624,13 +4777,13 @@
             "value" : "İstekler · %@"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · %@"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · %@"
@@ -4700,13 +4853,13 @@
             "value" : "İstekler · 24 sa"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · 24h"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · 24h"
@@ -4776,13 +4929,13 @@
             "value" : "İstekler · Bugün"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · 今日"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · 今日"
@@ -4852,16 +5005,16 @@
             "value" : "İstekler · Tüm alan adları · 24 sa"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "請求 · 全部域名 · 24h"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求 · 全部網域 · 24h"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請求 · 全部域名 · 24h"
           }
         }
       }
@@ -4928,13 +5081,13 @@
             "value" : "İstek arazisi"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求地形"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "請求地形"
@@ -5004,13 +5157,13 @@
             "value" : "Okumalar · %@"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取 · %@"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取 · %@"
@@ -5080,16 +5233,92 @@
             "value" : "Okumalar · Bugün"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取 · 今日"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "讀取 · 今日"
+          }
+        }
+      }
+    },
+    "账号" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الحساب"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuenta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계정"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conta"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conta"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesap"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳戶"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳戶"
           }
         }
       }
@@ -5156,16 +5385,16 @@
             "value" : "Hesap genel görünümü"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "帳戶總覽"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "帳號總覽"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳戶總覽"
           }
         }
       }
@@ -5232,16 +5461,92 @@
             "value" : "Hesap kullanımı"
           }
         },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳號用量"
+          }
+        },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "帳戶用量"
           }
+        }
+      }
+    },
+    "账户级用量不可用" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام الحساب غير متاح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontonutzung nicht verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account usage unavailable"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso de la cuenta no disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisation du compte indisponible"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウント使用量は利用できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계정 사용량을 사용할 수 없음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso da conta indisponível"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilização da conta indisponível"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesap kullanımı yok"
+          }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "帳號用量"
+            "value" : "帳戶級用量不可用"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳戶級用量不可用"
           }
         }
       }
@@ -5308,13 +5613,13 @@
             "value" : "Faturalandırma dönemi"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "帳期"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "帳期"
@@ -5384,16 +5689,16 @@
             "value" : "Alan adı seç"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇域名"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇網域"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇域名"
           }
         }
       }
@@ -5460,16 +5765,16 @@
             "value" : "Alan adı ve metrik seç"
           }
         },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選擇域名與指標"
-          }
-        },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇網域與指標"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇域名與指標"
           }
         }
       }
@@ -5536,13 +5841,13 @@
             "value" : "Hizmet seç"
           }
         },
-        "zh-HK" : {
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇服務"
           }
         },
-        "zh-Hant" : {
+        "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇服務"
@@ -5550,78 +5855,78 @@
         }
       }
     },
-    "已暂停" : {
+    "选择账号" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "متوقف مؤقتًا"
+            "value" : "اختر الحساب"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pausiert"
+            "value" : "Konto auswählen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Paused"
+            "value" : "Select Account"
           }
         },
         "es-MX" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En pausa"
+            "value" : "Seleccionar cuenta"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En pause"
+            "value" : "Choisir un compte"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "一時停止中"
+            "value" : "アカウントを選択"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "일시 중지됨"
+            "value" : "계정 선택"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pausado"
+            "value" : "Selecionar conta"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pausado"
+            "value" : "Selecionar conta"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duraklatıldı"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已暫停"
+            "value" : "Hesap Seç"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已暫停"
+            "value" : "選擇帳戶"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇帳戶"
           }
         }
       }

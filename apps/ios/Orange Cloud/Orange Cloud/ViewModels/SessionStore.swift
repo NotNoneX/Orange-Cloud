@@ -98,6 +98,13 @@ final class SessionStore {
             if let name = accounts.first?.name, let sessionId {
                 authManager.updateSessionLabel(name, for: sessionId)
             }
+            // 把本身份的账号并入 Widget 账号目录（小组件「选择账号」picker 数据源）
+            if let sessionId {
+                WidgetDataStore.mergeAccounts(
+                    accounts.map { WidgetAccount(id: $0.id, name: $0.name, sessionId: sessionId.uuidString) },
+                    sessionId: sessionId.uuidString
+                )
+            }
         } catch {
             self.error = error.localizedDescription
         }

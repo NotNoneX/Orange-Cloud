@@ -27,10 +27,19 @@ nonisolated enum UsageFetcher {
         let periodLabel: String
     }
 
-    private static func loadContext() -> Context? {
-        guard let defaults = UserDefaults(suiteName: WidgetSnapshot.appGroupID),
-              let accountId = defaults.string(forKey: "currentAccountId"),
-              let token = SharedAuth.currentValidAccessToken() else { return nil }
+    /// overrideAccountId/overrideSessionId 来自 Widget 配置（固定某账号）；
+    /// 缺省时回退当前账号 + 当前身份 token。
+    private static func loadContext(overrideAccountId: String? = nil, overrideSessionId: String? = nil) -> Context? {
+        guard let defaults = UserDefaults(suiteName: WidgetSnapshot.appGroupID) else { return nil }
+        guard let accountId = overrideAccountId ?? defaults.string(forKey: "currentAccountId") else { return nil }
+        // 选定账号取其所属身份的 token；未指定身份则用当前身份
+        let token: String?
+        if let sid = overrideSessionId {
+            token = SharedAuth.validAccessToken(sessionId: sid)
+        } else {
+            token = SharedAuth.currentValidAccessToken()
+        }
+        guard let token else { return nil }
 
         var prefs = AccountPrefs()
         if let data = defaults.data(forKey: "accountPrefsById"),
@@ -50,8 +59,8 @@ nonisolated enum UsageFetcher {
 
     // MARK: - 入口
 
-    static func freshService(_ id: String) async -> WidgetUsageService? {
-        guard let context = loadContext() else { return nil }
+    static func freshService(_ id: String, accountId: String? = nil, sessionId: String? = nil) async -> WidgetUsageService? {
+        guard let context = loadContext(overrideAccountId: accountId, overrideSessionId: sessionId) else { return nil }
         switch id {
         case "workers": return await fetchWorkers(context)
         case "r2":      return await fetchR2(context)

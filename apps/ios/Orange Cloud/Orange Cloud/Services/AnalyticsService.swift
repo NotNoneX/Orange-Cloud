@@ -28,6 +28,34 @@ struct AnalyticsService {
         return try await fetch(zoneId: zoneId, range: range, since: since, until: until)
     }
 
+    /// 按国家/地区聚合的流量（全球流量地图用）。各时间桶携带 countryMap，Swift 端按国家码合并求和。
+    func zoneCountryTraffic(zoneId: String, range: AnalyticsTimeRange) async throws -> [CountryTraffic] {
+        let (since, until) = range.sinceUntil()
+        let query = range.usesHourlyGroups
+            ? AnalyticsQueries.zoneCountryHourly(limit: range.limit)
+            : AnalyticsQueries.zoneCountryDaily(limit: range.limit)
+
+        let data: ZoneAnalyticsData = try await client.graphQL(
+            query: query,
+            variables: ZoneAnalyticsVariables(zoneTag: zoneId, since: since, until: until)
+        )
+        guard let zone = data.viewer.zones.first else { return [] }
+
+        var aggregate: [String: (requests: Int, threats: Int, bytes: Int)] = [:]
+        for group in zone.groups {
+            for entry in group.sum?.countryMap ?? [] {
+                guard let code = entry.clientCountryName, !code.isEmpty else { continue }
+                aggregate[code, default: (0, 0, 0)].requests += entry.requests ?? 0
+                aggregate[code, default: (0, 0, 0)].threats  += entry.threats ?? 0
+                aggregate[code, default: (0, 0, 0)].bytes    += entry.bytes ?? 0
+            }
+        }
+
+        return aggregate
+            .map { CountryTraffic(countryCode: $0.key, requests: $0.value.requests, threats: $0.value.threats, bytes: $0.value.bytes) }
+            .sorted { $0.requests > $1.requests }
+    }
+
     /// Dashboard / Widget：多个 Zone 的 24h 流量（含前一窗口请求数做趋势），
     /// 一次 GraphQL 查完；失败回退为逐 Zone 并发查询（无趋势）。
     func trafficByZone24h(zoneIds: [String]) async throws -> [String: ZoneTrafficBundle] {

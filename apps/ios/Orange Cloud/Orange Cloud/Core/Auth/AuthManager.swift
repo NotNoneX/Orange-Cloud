@@ -69,8 +69,9 @@ final class AuthManager {
     }
 
     private var currentWebSession: ASWebAuthenticationSession?
-    /// 进行中的刷新任务：并发的 401/临期请求复用同一次刷新，避免刷新令牌轮换下的竞态
-    private var refreshTask: Task<String, Error>?
+    /// 进行中的刷新任务（按身份键）：同一身份的并发 401/临期请求复用同一次刷新，避免刷新令牌
+    /// 轮换下的竞态；不同身份各自独立，切账号后旧身份的在途刷新不会串到新身份。
+    private var refreshTasks: [UUID: Task<String, Error>] = [:]
     private let contextProvider = WebAuthContextProvider()
     private static let sessionsKey = "authSessions"
     private static let currentSessionKey = "currentSessionId"
@@ -362,37 +363,42 @@ final class AuthManager {
         )
     }
 
-    /// 刷新当前身份的 access_token。并发去重：多个临期/401 请求只触发一次网络刷新，
-    /// 否则刷新令牌轮换（每次刷新作废上一枚）会让并发请求互相把令牌作废，导致误登出。
-    func refreshAccessToken() async throws -> String {
-        if let inFlight = refreshTask {
+    /// 刷新当前身份的 access_token。两条铁律：
+    /// ① 并发去重 + 按身份隔离：同一身份的多个临期/401 请求只触发一次网络刷新（刷新令牌轮换下
+    ///    避免并发请求互相作废），不同身份互不影响。
+    /// ② 绑定发起身份：调用方可传发起请求时的 `expectedSessionId`；若此刻已切到别的身份，说明这是
+    ///    上个账号的陈旧请求，直接放弃刷新——更不会误删任何身份（多账号雪崩登出的根因）。
+    func refreshAccessToken(expectedSessionId: UUID? = nil) async throws -> String {
+        guard let sessionId = currentSessionId else { throw AuthError.notLoggedIn }
+        if let expected = expectedSessionId, expected != sessionId {
+            throw AuthError.notLoggedIn
+        }
+        if let inFlight = refreshTasks[sessionId] {
             return try await inFlight.value
         }
         let task = Task<String, Error> { [weak self] in
             guard let self else { throw AuthError.notLoggedIn }
-            return try await self.performTokenRefresh()
+            return try await self.performTokenRefresh(sessionId: sessionId)
         }
-        refreshTask = task
-        defer { refreshTask = nil }
+        refreshTasks[sessionId] = task
+        defer { refreshTasks[sessionId] = nil }
         return try await task.value
     }
 
     /// 实际刷新逻辑：仅在刷新令牌确已失效（token 端点 400）时移除该身份；
     /// 网络中断 / 超时 / 5xx / 429 等瞬时失败保留身份并原样抛出，交由调用方稍后重试，
     /// 避免一次网络抖动就把用户登出（其他身份始终不受影响）。
-    private func performTokenRefresh() async throws -> String {
-        guard let sessionId = currentSessionId,
-              let stored = TokenStore.load(sessionId: sessionId) else {
-            if let id = currentSessionId {
-                AppLog.auth.error("token missing from keychain → logout. session=\(id.uuidString)")
-                removeSession(id)
-            }
+    private func performTokenRefresh(sessionId: UUID) async throws -> String {
+        guard let stored = TokenStore.load(sessionId: sessionId) else {
+            // 钥匙串读不到该身份 token：多半是切账号竞态下的陈旧请求，或确已被清。
+            // 保留身份、抛出由调用方当未授权处理——绝不在此删身份（曾导致多账号雪崩登出）。
+            AppLog.auth.error("token missing from keychain (session kept). session=\(sessionId.uuidString)")
             throw AuthError.notLoggedIn
         }
         guard let refreshToken = stored.refreshToken else {
-            // 没有刷新令牌则无从续期，只能重新授权
-            AppLog.auth.error("stored token has no refresh token → logout. session=\(sessionId.uuidString)")
-            removeSession(sessionId)
+            // 无刷新令牌则无从续期。同样保留身份，交由用户在账号切换器里手动重新授权，
+            // 不删身份，避免一次 401 把会话连锁清空。
+            AppLog.auth.error("stored token has no refresh token (session kept). session=\(sessionId.uuidString)")
             throw AuthError.notLoggedIn
         }
 

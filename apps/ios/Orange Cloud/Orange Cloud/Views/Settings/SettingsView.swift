@@ -28,6 +28,7 @@ struct SettingsView: View {
 
     @AppStorage(AppAppearance.storageKey) private var appearanceRaw = AppAppearance.system.rawValue
     @AppStorage(AppLanguage.storageKey)   private var languageRaw   = AppLanguage.system.rawValue
+    @AppStorage(AppMotion.storageKey)     private var reduceAnimations = false
 
     var body: some View {
         NavigationStack {
@@ -141,10 +142,17 @@ struct SettingsView: View {
                             Text("语言")
                         }
                     }
+
+                    Toggle(isOn: $reduceAnimations) {
+                        HStack(spacing: 12) {
+                            TintIcon(systemImage: "wand.and.rays.inverse", color: .purple)
+                            Text("减少动画")
+                        }
+                    }
                 } header: {
                     Text("外观与语言")
                 } footer: {
-                    Text("语言默认跟随系统。更改语言后需重新打开 App 生效。")
+                    Text("语言默认跟随系统，更改后需重新打开 App 生效。开启「减少动画」后，页面切换与界面变化将省去过渡动画，操作更跟手。")
                 }
                 .onChange(of: languageRaw) {
                     (AppLanguage(rawValue: languageRaw) ?? .system).apply()

@@ -36,6 +36,7 @@ enum CacheSync {
         try context.save()
 
         WidgetSnapshot(
+            accountId: accountId,
             accountName: accountName,
             totalZones: zones.count,
             activeZones: zones.filter { $0.status == "active" }.count,

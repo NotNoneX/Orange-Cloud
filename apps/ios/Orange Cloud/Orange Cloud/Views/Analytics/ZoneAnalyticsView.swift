@@ -17,6 +17,7 @@ struct ZoneAnalyticsSection: View {
     @Environment(EntitlementStore.self) private var entitlements
     @State private var selectedDate: Date?
     @State private var rangePaywallPresented = false
+    @State private var summaryPaywallPresented = false
     // 总请求大数字：保留 40pt 视觉基线，同时随动态字体缩放
     @ScaledMetric(relativeTo: .largeTitle) private var heroNumberSize: CGFloat = 40
 
@@ -41,9 +42,11 @@ struct ZoneAnalyticsSection: View {
                     .frame(minHeight: 200)
                 }
             } else {
+                aiSummaryCard
                 requestsHeroCard
                 cacheHitCard
                 smallCardGrid
+                ZoneTrafficMapCard(viewModel: viewModel)
             }
         }
         .task {
@@ -56,10 +59,130 @@ struct ZoneAnalyticsSection: View {
         .sheet(isPresented: $rangePaywallPresented) {
             PaywallView(feature: .analyticsRange)
         }
+        .sheet(isPresented: $summaryPaywallPresented) {
+            PaywallView(feature: .aiInsights)
+        }
         .onChange(of: viewModel.selectedRange) {
             selectedDate = nil
+            viewModel.clearInsight()
             Task { await viewModel.load() }
         }
+    }
+
+    // MARK: - 智能摘要卡（设备端 AI，只读，Pro）
+
+    /// 仅在设备真正支持设备端模型时出现；免费层展示预告 → 付费墙，Pro 现场生成。
+    @ViewBuilder
+    private var aiSummaryCard: some View {
+        if AnalyticsAssistant.isReady {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Label("智能摘要", systemImage: "sparkles")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if !entitlements.isPro { ProBadge() }
+                }
+
+                if entitlements.isPro {
+                    proSummaryContent
+                } else {
+                    lockedSummaryTeaser
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .glassIsland()
+        }
+    }
+
+    @ViewBuilder
+    private var proSummaryContent: some View {
+        if let insight = viewModel.insight {
+            VStack(alignment: .leading, spacing: 8) {
+                if !insight.summary.isEmpty {
+                    Text(insight.summary)
+                        .font(.callout.weight(.medium))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                ForEach(Array(insight.highlights.enumerated()), id: \.offset) { _, line in
+                    Label {
+                        Text(line)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } icon: {
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 5))
+                            .foregroundStyle(Color.ocOrange)
+                    }
+                }
+                Button {
+                    Task { await viewModel.generateInsight() }
+                } label: {
+                    HStack(spacing: 4) {
+                        if viewModel.isSummarizing {
+                            ProgressView().controlSize(.mini)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                        Text(viewModel.isSummarizing ? String(localized: "分析中…") : String(localized: "重新生成"))
+                    }
+                    .font(.caption.weight(.medium))
+                }
+                .buttonStyle(.borderless)
+                .tint(Color.ocOrangeText)
+                .disabled(viewModel.isSummarizing)
+                .padding(.top, 2)
+            }
+            .transition(.opacity)
+        } else {
+            Button {
+                Task { await viewModel.generateInsight() }
+            } label: {
+                HStack(spacing: 8) {
+                    if viewModel.isSummarizing {
+                        ProgressView().controlSize(.small)
+                        Text("分析中…")
+                    } else {
+                        Image(systemName: "sparkles")
+                        Text("生成本期摘要")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .font(.callout.weight(.medium))
+            }
+            .buttonStyle(.bordered)
+            .tint(Color.ocOrange)
+            .disabled(viewModel.isSummarizing)
+
+            if let error = viewModel.summaryError {
+                Text(error)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+            Text("在设备上离线生成，仅基于当前所选时间范围的数据。")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+    }
+
+    private var lockedSummaryTeaser: some View {
+        Button {
+            summaryPaywallPresented = true
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("用一句话读懂本期流量：增长、异常与主要来源，设备端离线生成。")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("升级 Pro 解锁")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.ocOrangeText)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - 骨架（总请求卡 + 命中率卡 + 2×2 小卡，与真实布局同形状）

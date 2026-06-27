@@ -109,7 +109,7 @@ struct ZoneListView: View {
                             Text("\(cachedZones.count) 个域名 · \(activeCount) 个已启用")
                         }
                     }
-                    .refreshable { await refresh() }
+                    .refreshable { await refresh(force: true) }
                 }
             }
             .navigationTitle("域名")
@@ -187,7 +187,7 @@ struct ZoneListView: View {
             .padding(OCLayout.pagePadding)
         }
         .refreshable {
-            await refresh()
+            await refresh(force: true)
         }
     }
 
@@ -197,7 +197,7 @@ struct ZoneListView: View {
         RefreshButton(
             isLoading: viewModel.isLoading,
             failed: viewModel.error != nil,
-            action: { Task { await refresh() } }
+            action: { Task { await refresh(force: true) } }
         )
     }
 
@@ -214,10 +214,10 @@ struct ZoneListView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(Color.ocOrangePressed)
                     .fontWeight(.bold)
-                Button("刷新") { Task { await refresh() } }
+                Button("刷新") { Task { await refresh(force: true) } }
                     .buttonStyle(.bordered)
             } else {
-                Button("刷新") { Task { await refresh() } }
+                Button("刷新") { Task { await refresh(force: true) } }
                     .buttonStyle(.borderedProminent)
                     .tint(Color.ocOrangePressed)
                     .fontWeight(.bold)
@@ -225,10 +225,10 @@ struct ZoneListView: View {
         }
     }
 
-    private func refresh() async {
+    private func refresh(force: Bool = false) async {
         await session.ensureAccounts()
         guard let account = session.selectedAccount else { return }
-        await viewModel.refresh(accountId: account.id, accountName: account.name, context: modelContext)
+        await viewModel.refresh(accountId: account.id, accountName: account.name, context: modelContext, force: force)
     }
 }
 

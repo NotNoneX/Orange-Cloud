@@ -18,6 +18,7 @@ struct Orange_CloudApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     @AppStorage(AppAppearance.storageKey) private var appearanceRaw = AppAppearance.system.rawValue
+    @AppStorage(AppMotion.storageKey) private var reduceAnimations = false
 
     let sharedModelContainer = CacheContainer.shared
 
@@ -52,6 +53,13 @@ struct Orange_CloudApp: App {
                 .environment(EntitlementStore.shared)
                 .tint(.ocOrange)   // 全局品牌橙（Cloudflare #F48120）
                 .preferredColorScheme(AppAppearance(rawValue: appearanceRaw)?.colorScheme)
+                // 「减少动画」：全局抹掉隐式与 withAnimation 过渡，让界面变化即时生效
+                .transaction { txn in
+                    if reduceAnimations {
+                        txn.disablesAnimations = true
+                        txn.animation = nil
+                    }
+                }
                 .onContinueUserActivity(CSSearchableItemActionType) { activity in
                     handleSpotlightTap(activity)
                 }

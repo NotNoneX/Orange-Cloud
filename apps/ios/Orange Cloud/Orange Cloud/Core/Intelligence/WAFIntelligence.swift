@@ -41,19 +41,8 @@ nonisolated enum WAFAssistantError: LocalizedError {
 
 nonisolated enum WAFAssistant {
 
-    /// 设备端模型此刻是否真的可用——AI 入口的唯一判据。
-    ///
-    /// Foundation Models 用的就是 Apple 智能的端侧模型，因此它**继承 Apple 智能的地区限制**：
-    /// 在中国大陆（Apple 智能暂未开放）等受限地区，即便是 iOS 26 的兼容机型，`isAvailable`
-    /// 也会返回 false。所以这里不靠 `#available(iOS 26)`、更不手动判地区/语言，而是直接以框架的
-    /// `SystemLanguageModel.isAvailable` 为准——它已把「系统版本 / 机型 / 地区 / 用户开关 /
-    /// 模型下载状态」全部收进去。不可用时整套 AI 入口静默隐藏，手敲表达式始终保留。
-    static var isReady: Bool {
-        if #available(iOS 26.0, *) {
-            return SystemLanguageModel.default.isAvailable
-        }
-        return false
-    }
+    /// 设备端模型此刻是否真的可用——AI 入口的唯一判据，详见 `OnDeviceAI.isReady`。
+    static var isReady: Bool { OnDeviceAI.isReady }
 
     /// 自然语言 → 结构化草稿 → 确定性渲染成表达式。永不直接吐表达式字符串。
     static func generateRule(from naturalLanguage: String, locale: Locale = .current) async throws -> GeneratedWAFRule {
@@ -78,7 +67,7 @@ nonisolated enum WAFAssistant {
                 options: GenerationOptions(temperature: 0.1)
             ).content
         } catch let error as LanguageModelSession.GenerationError {
-            throw WAFAssistantError.generation(Self.friendlyMessage(for: error))
+            throw WAFAssistantError.generation(OnDeviceAI.friendlyMessage(for: error))
         }
         let rule = draft.render()
         guard !rule.expression.isEmpty else { throw WAFAssistantError.emptyResult }
@@ -104,27 +93,11 @@ nonisolated enum WAFAssistant {
                 options: GenerationOptions(temperature: 0.3)
             ).content
         } catch let error as LanguageModelSession.GenerationError {
-            throw WAFAssistantError.generation(Self.friendlyMessage(for: error))
+            throw WAFAssistantError.generation(OnDeviceAI.friendlyMessage(for: error))
         }
         let cleaned = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleaned.isEmpty else { throw WAFAssistantError.emptyResult }
         return cleaned
-    }
-
-    @available(iOS 26.0, *)
-    private static func friendlyMessage(for error: LanguageModelSession.GenerationError) -> String {
-        switch error {
-        case .guardrailViolation:
-            return String(localized: "这条描述被安全过滤拦下了，换个说法再试。")
-        case .unsupportedLanguageOrLocale:
-            return String(localized: "当前语言暂不被设备端模型支持，可改用英文描述。")
-        case .exceededContextWindowSize:
-            return String(localized: "描述太长了，精简后再试。")
-        case .assetsUnavailable, .rateLimited:
-            return String(localized: "设备端模型暂时不可用，请稍后再试。")
-        default:
-            return String(localized: "没能生成规则，换个说法再试试。")
-        }
     }
 }
 

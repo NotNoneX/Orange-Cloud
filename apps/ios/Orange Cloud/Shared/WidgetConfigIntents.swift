@@ -15,6 +15,67 @@
 import Foundation
 import AppIntents
 
+// MARK: - 账号选项（账号总览 / 用量 Widget 可固定某个账号）
+
+nonisolated struct WidgetAccountEntity: AppEntity, Identifiable {
+
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "账号"
+    static let defaultQuery = WidgetAccountEntityQuery()
+
+    let id:        String     // accountId
+    let name:      String
+    let sessionId: String
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)")
+    }
+
+    init(id: String, name: String, sessionId: String) {
+        self.id = id
+        self.name = name
+        self.sessionId = sessionId
+    }
+
+    init(_ account: WidgetAccount) {
+        self.init(id: account.id, name: account.name, sessionId: account.sessionId)
+    }
+}
+
+nonisolated struct WidgetAccountEntityQuery: EntityQuery {
+
+    private func all() -> [WidgetAccountEntity] {
+        WidgetDataStore.loadAccounts().map(WidgetAccountEntity.init)
+    }
+
+    func entities(for identifiers: [WidgetAccountEntity.ID]) async throws -> [WidgetAccountEntity] {
+        all().filter { identifiers.contains($0.id) }
+    }
+
+    func suggestedEntities() async throws -> [WidgetAccountEntity] {
+        all()
+    }
+
+    /// 默认 = App Group 记录的当前账号；缺省取目录第一个
+    func defaultResult() async -> WidgetAccountEntity? {
+        let entities = all()
+        if let current = WidgetSnapshot.currentAccountId(),
+           let match = entities.first(where: { $0.id == current }) {
+            return match
+        }
+        return entities.first
+    }
+}
+
+// MARK: - 账号总览 Widget：配置 Intent（固定某个账号）
+
+nonisolated struct AccountOverviewConfigIntent: WidgetConfigurationIntent {
+    static let title: LocalizedStringResource = "选择账号"
+    static let description = IntentDescription("展示某个账号的 24 小时请求与域名状态")
+
+    @Parameter(title: "账号")
+    var account: WidgetAccountEntity?
+}
+
 // MARK: - 用量 Widget：服务选项
 
 nonisolated struct UsageServiceEntity: AppEntity, Identifiable {
@@ -58,6 +119,9 @@ nonisolated struct UsageConfigIntent: WidgetConfigurationIntent {
 
     @Parameter(title: "服务")
     var service: UsageServiceEntity?
+
+    @Parameter(title: "账号")
+    var account: WidgetAccountEntity?
 
     /// 所选服务 id（未配置时回退 Workers）
     var serviceId: String { service?.id ?? "workers" }

@@ -9,17 +9,18 @@
 
 import WidgetKit
 import SwiftUI
+import AppIntents
 
 nonisolated struct AccountOverviewEntry: TimelineEntry {
     let date: Date
     let snapshot: WidgetSnapshot?
-    let totalRequests: Int      // 全部域名 24h 合计（无 Zone 快照时为 0）
+    let totalRequests: Int      // 所选账号域名 24h 合计（无 Zone 快照时为 0）
     let series: [Int]           // 各域名逐小时求和（尾对齐）
 }
 
-/// 把各 Zone 的 24h 序列按「距今相同小时」对齐后求和
-nonisolated private func aggregateZones() -> (total: Int, series: [Int]) {
-    let zones = WidgetDataStore.loadZones()
+/// 把某账号各 Zone 的 24h 序列按「距今相同小时」对齐后求和
+nonisolated private func aggregateZones(accountId: String?) -> (total: Int, series: [Int]) {
+    let zones = WidgetDataStore.loadZones(accountId: accountId)
     guard !zones.isEmpty else { return (0, []) }
     let total = zones.reduce(0) { $0 + $1.requests }
     let length = zones.map(\.requestsSeries.count).max() ?? 0
@@ -36,7 +37,7 @@ nonisolated private func aggregateZones() -> (total: Int, series: [Int]) {
 
 nonisolated private let sampleSeries = [42, 50, 47, 61, 58, 72, 90, 84, 95, 110, 104, 96, 88, 92, 81, 76, 70, 64, 58, 66, 61, 55, 50, 57]
 
-nonisolated struct ZoneStatusProvider: TimelineProvider {
+nonisolated struct ZoneStatusProvider: AppIntentTimelineProvider {
 
     func placeholder(in context: Context) -> AccountOverviewEntry {
         AccountOverviewEntry(
@@ -47,21 +48,23 @@ nonisolated struct ZoneStatusProvider: TimelineProvider {
         )
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (AccountOverviewEntry) -> Void) {
-        completion(currentEntry())
+    func snapshot(for configuration: AccountOverviewConfigIntent, in context: Context) async -> AccountOverviewEntry {
+        currentEntry(for: configuration)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<AccountOverviewEntry>) -> Void) {
+    func timeline(for configuration: AccountOverviewConfigIntent, in context: Context) async -> Timeline<AccountOverviewEntry> {
         // App 刷新数据时会主动 reload；这里兜底每小时重读一次（天色相位也随之走动）
         let next = Calendar.current.date(byAdding: .hour, value: 1, to: .now) ?? .now
-        completion(Timeline(entries: [currentEntry()], policy: .after(next)))
+        return Timeline(entries: [currentEntry(for: configuration)], policy: .after(next))
     }
 
-    private func currentEntry() -> AccountOverviewEntry {
-        let aggregate = aggregateZones()
+    private func currentEntry(for configuration: AccountOverviewConfigIntent) -> AccountOverviewEntry {
+        // 配置固定某账号则用它，否则回退当前账号
+        let accountId = configuration.account?.id ?? WidgetSnapshot.currentAccountId()
+        let aggregate = aggregateZones(accountId: accountId)
         return AccountOverviewEntry(
             date: .now,
-            snapshot: WidgetSnapshot.load(),
+            snapshot: WidgetSnapshot.load(accountId: accountId),
             totalRequests: aggregate.total,
             series: aggregate.series
         )
@@ -71,12 +74,12 @@ nonisolated struct ZoneStatusProvider: TimelineProvider {
 struct ZoneStatusWidget: Widget {
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "ZoneStatusWidget", provider: ZoneStatusProvider()) { entry in
+        AppIntentConfiguration(kind: "ZoneStatusWidget", intent: AccountOverviewConfigIntent.self, provider: ZoneStatusProvider()) { entry in
             AccountOverviewWidgetView(entry: entry)
                 .daybreakContainer(date: entry.date)
         }
         .configurationDisplayName("账号总览")
-        .description("全账号 24 小时请求与域名运行状态")
+        .description("某个账号 24 小时请求与域名运行状态，长按可选择账号")
         .supportedFamilies([.systemSmall, .systemMedium, .accessoryInline, .accessoryCircular, .accessoryRectangular])
         .contentMarginsDisabled()
     }

@@ -75,6 +75,7 @@ actor CFAPIClient {
     }
 
     private func streamingDownload(path: String, queryItems: [URLQueryItem], isRetry: Bool) async throws -> URL {
+        let requestSessionId = await authManager.currentSessionId
         let request = try await buildRequest(method: "GET", path: path, queryItems: queryItems, contentType: nil)
         let (tempURL, response): (URL, URLResponse)
         do {
@@ -87,7 +88,16 @@ actor CFAPIClient {
             throw APIError.networkError(URLError(.badServerResponse))
         }
         if http.statusCode == 401 && !isRetry {
-            _ = try await authManager.refreshAccessToken()
+            guard let sid = requestSessionId, await authManager.currentSessionId == sid else {
+                try? FileManager.default.removeItem(at: tempURL)
+                throw APIError.unauthorized
+            }
+            do {
+                _ = try await authManager.refreshAccessToken(expectedSessionId: sid)
+            } catch {
+                try? FileManager.default.removeItem(at: tempURL)
+                throw APIError.unauthorized
+            }
             return try await streamingDownload(path: path, queryItems: queryItems, isRetry: true)
         }
         guard (200...299).contains(http.statusCode) else {
@@ -121,6 +131,7 @@ actor CFAPIClient {
         onProgress: (@Sendable (Double) -> Void)?,
         isRetry: Bool
     ) async throws -> T {
+        let requestSessionId = await authManager.currentSessionId
         let request = try await buildRequest(method: "PUT", path: path, queryItems: [], contentType: contentType)
         let delegate = onProgress.map { UploadProgressDelegate(onProgress: $0) }
         let (data, response): (Data, URLResponse)
@@ -134,7 +145,14 @@ actor CFAPIClient {
             throw APIError.networkError(URLError(.badServerResponse))
         }
         if http.statusCode == 401 && !isRetry {
-            _ = try await authManager.refreshAccessToken()
+            guard let sid = requestSessionId, await authManager.currentSessionId == sid else {
+                throw APIError.unauthorized
+            }
+            do {
+                _ = try await authManager.refreshAccessToken(expectedSessionId: sid)
+            } catch {
+                throw APIError.unauthorized
+            }
             return try await streamingUpload(path: path, fileURL: fileURL, contentType: contentType, onProgress: onProgress, isRetry: true)
         }
         guard (200...299).contains(http.statusCode) else {
@@ -302,6 +320,9 @@ actor CFAPIClient {
         isRetry: Bool = false
     ) async throws -> (Data, HTTPURLResponse) {
 
+        // 0. 绑定发起身份：401 重试 / 刷新只针对此刻这个身份；期间切账号则丢弃（陈旧请求）
+        let requestSessionId = await authManager.currentSessionId
+
         // 1. 检查 Token 是否临期，如需则先刷新
         let token = try await validAccessToken()
 
@@ -340,8 +361,17 @@ actor CFAPIClient {
 
         // 4. 401：Token 过期，刷新后重试一次
         if http.statusCode == 401 && !isRetry {
+            // 切账号竞态：若已不是发起时的身份，丢弃这次（上个账号的陈旧请求），不刷新不重试
+            guard let sid = requestSessionId, await authManager.currentSessionId == sid else {
+                AppLog.network.notice("\(method) /\(Self.logPath(path)) -> 401, session changed, drop")
+                throw APIError.unauthorized
+            }
             AppLog.network.notice("\(method) /\(Self.logPath(path)) -> 401, refresh & retry")
-            _ = try await authManager.refreshAccessToken()
+            do {
+                _ = try await authManager.refreshAccessToken(expectedSessionId: sid)
+            } catch {
+                throw APIError.unauthorized   // 刷新失败/身份已变：保留身份，按未授权失败
+            }
             return try await performRequest(
                 method: method, path: path, queryItems: queryItems,
                 body: body, contentType: contentType, isRetry: true
