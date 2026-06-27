@@ -15,6 +15,7 @@ struct DNSRecordFormView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(EntitlementStore.self) private var entitlements
 
     @State private var type:     String = "A"
     @State private var name:     String = ""
@@ -23,6 +24,11 @@ struct DNSRecordFormView: View {
     @State private var ttl:      Int    = 1
     @State private var priority: Int    = 10
     @State private var comment:  String = ""
+
+    // 设备端 AI 生成（仅新建）
+    @State private var nlPrompt = ""
+    @State private var readback: String?
+    @State private var aiPaywallPresented = false
 
     private static let recordTypes = ["A", "AAAA", "CNAME", "TXT", "MX", "NS"]
     private static let ttlOptions: [(label: String, value: Int)] = [
@@ -54,6 +60,10 @@ struct DNSRecordFormView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if DNSAssistant.isReady && !isEditing {
+                    aiSection
+                }
+
                 Section("类型") {
                     Picker("记录类型", selection: $type) {
                         ForEach(Self.recordTypes, id: \.self) { Text($0).tag($0) }
@@ -126,7 +136,90 @@ struct DNSRecordFormView: View {
                 }
             }
             .onAppear(perform: populateIfEditing)
-            .interactiveDismissDisabled(viewModel.isSaving)
+            .interactiveDismissDisabled(viewModel.isSaving || viewModel.isGenerating)
+            .onDisappear { viewModel.generationError = nil }
+            .sheet(isPresented: $aiPaywallPresented) {
+                PaywallView(feature: .aiDNS)
+            }
+        }
+    }
+
+    // MARK: - 设备端 AI 生成
+
+    @ViewBuilder
+    private var aiSection: some View {
+        Section {
+            TextField(
+                String(localized: "例如：给 blog 加一条指向 1.2.3.4 的 A 记录"),
+                text: $nlPrompt,
+                axis: .vertical
+            )
+            .lineLimit(2...4)
+
+            Button {
+                if entitlements.isPro {
+                    Task { await generate() }
+                } else {
+                    aiPaywallPresented = true
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    if viewModel.isGenerating {
+                        ProgressView().controlSize(.small)
+                        Text("生成中…")
+                    } else {
+                        Image(systemName: "sparkles")
+                        Text("生成记录")
+                    }
+                    if !entitlements.isPro {
+                        Spacer()
+                        ProBadge()
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .disabled(nlPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isGenerating)
+
+            if let readback {
+                Label {
+                    Text(readback)
+                        .font(.footnote)
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                } icon: {
+                    Image(systemName: "checkmark.seal.fill")
+                        .foregroundStyle(Color.ocOrangeText)
+                }
+            }
+
+            if let genError = viewModel.generationError {
+                Text(genError)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+        } header: {
+            Label("用自然语言描述", systemImage: "sparkles")
+        } footer: {
+            Text(readback == nil
+                 ? String(localized: "在设备上离线生成，已为你填好下方表单，提交前请核对。")
+                 : String(localized: "已填好下方表单，确认无误后再保存。"))
+        }
+    }
+
+    private func generate() async {
+        guard let result = await viewModel.generateRecord(from: nlPrompt) else {
+            readback = nil
+            return
+        }
+        withAnimation(.smooth) {
+            let record = result.record
+            type    = record.type
+            name    = record.name
+            content = record.content
+            proxied = record.proxied
+            ttl     = record.ttl
+            if let priority = record.priority { self.priority = priority }
+            readback = result.summary
         }
     }
 

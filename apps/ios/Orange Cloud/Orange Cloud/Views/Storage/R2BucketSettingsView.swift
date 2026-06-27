@@ -13,12 +13,23 @@ struct R2BucketSettingsView: View {
     let canWrite: Bool
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(AuthManager.self) private var auth
+    @Environment(EntitlementStore.self) private var entitlements
     @State private var viewModel: R2BucketSettingsViewModel
     @State private var showAddCors = false
     @State private var showDenied = false
 
+    // 文件 App 挂载（Pro）
+    private let bucketName: String
+    private let accountId: String
+    @State private var isMounted = false
+    @State private var isMountBusy = false
+    @State private var mountPaywall = false
+
     init(bucket: R2Bucket, session: SessionStore, canWrite: Bool) {
         self.canWrite = canWrite
+        self.bucketName = bucket.name
+        self.accountId = session.selectedAccount?.id ?? ""
         _viewModel = State(initialValue: R2BucketSettingsViewModel(
             service: session.r2Service,
             accountId: session.selectedAccount?.id ?? "",
@@ -29,6 +40,7 @@ struct R2BucketSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                filesSection
                 managedSection
                 customDomainsSection
                 corsSection
@@ -39,6 +51,10 @@ struct R2BucketSettingsView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("完成") { dismiss() }
                 }
+            }
+            .task { await refreshMountState() }
+            .sheet(isPresented: $mountPaywall) {
+                PaywallView(feature: .filesApp)
             }
             .overlay {
                 if viewModel.isLoading && viewModel.managedDomain == nil
@@ -67,6 +83,64 @@ struct R2BucketSettingsView: View {
             }
             .sensoryFeedback(.success, trigger: viewModel.didChange)
         }
+    }
+
+    // MARK: - 文件 App 挂载（Pro，旗舰功能）
+
+    @ViewBuilder
+    private var filesSection: some View {
+        Section {
+            if entitlements.isPro {
+                Toggle(isOn: Binding(
+                    get: { isMounted },
+                    set: { want in Task { await setMounted(want) } }
+                )) {
+                    Label("在「文件」App 中显示", systemImage: "folder.badge.gearshape")
+                }
+                .disabled(isMountBusy || accountId.isEmpty || auth.currentSessionId == nil)
+            } else {
+                Button {
+                    mountPaywall = true
+                } label: {
+                    HStack {
+                        Label("在「文件」App 中显示", systemImage: "folder.badge.gearshape")
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        ProBadge()
+                    }
+                }
+            }
+        } header: {
+            Text("文件 App")
+        } footer: {
+            Text("打开后，这个存储桶会像 iCloud 云盘一样出现在系统「文件」App 里，可浏览、读取、上传、删除，并用任意 App 打开。单个文件上传上限约 300 MB（Cloudflare API 限制）。")
+        }
+    }
+
+    private func refreshMountState() async {
+        guard entitlements.isPro, let sid = auth.currentSessionId, !accountId.isEmpty else { return }
+        isMounted = await FileProviderMountManager.isMounted(
+            sessionId: sid, accountId: accountId, bucketName: bucketName
+        )
+    }
+
+    private func setMounted(_ want: Bool) async {
+        guard let sid = auth.currentSessionId, !accountId.isEmpty else { return }
+        isMountBusy = true
+        defer { isMountBusy = false }
+        do {
+            if want {
+                try await FileProviderMountManager.mount(sessionId: sid, accountId: accountId, bucketName: bucketName)
+            } else {
+                try await FileProviderMountManager.unmount(sessionId: sid, accountId: accountId, bucketName: bucketName)
+            }
+        } catch {
+            viewModel.error = error.localizedDescription
+        }
+        // 以系统真实状态为准回填开关
+        isMounted = await FileProviderMountManager.isMounted(
+            sessionId: sid, accountId: accountId, bucketName: bucketName
+        )
     }
 
     // MARK: - 公开访问（r2.dev）

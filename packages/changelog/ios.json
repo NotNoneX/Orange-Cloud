@@ -1,5 +1,145 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026.06.28",
+    "channel": "App Store",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "folder.badge.gearshape",
+        "title": {
+          "zh-Hans": "在「文件」App 中打开 R2",
+          "en": "Open R2 in the Files app",
+          "zh-Hant": "在「檔案」App 中開啟 R2",
+          "zh-HK": "在「檔案」App 中開啟 R2",
+          "ja": "「ファイル」App で R2 を開く",
+          "es-MX": "Abre R2 en la app Archivos",
+          "ko": "파일 앱에서 R2 열기",
+          "pt-BR": "Abra o R2 no app Arquivos",
+          "pt-PT": "Abra o R2 na app Ficheiros",
+          "de": "R2 in der Dateien-App öffnen",
+          "fr": "Ouvrir R2 dans l’app Fichiers",
+          "ar": "افتح R2 في تطبيق الملفات",
+          "tr": "R2’yi Dosyalar uygulamasında aç"
+        },
+        "detail": {
+          "zh-Hans": "把 R2 存储桶挂进系统「文件」App，像 iCloud 云盘一样浏览、上传、下载、重命名，并用任意 App 直接打开。Pro 功能。",
+          "en": "Mount an R2 bucket right inside the system Files app — browse, upload, download and rename like iCloud Drive, and open files in any app. A Pro feature.",
+          "zh-Hant": "將 R2 儲存桶掛進系統「檔案」App，像 iCloud 雲端硬碟一樣瀏覽、上傳、下載、重新命名，並用任何 App 直接開啟。Pro 功能。",
+          "zh-HK": "將 R2 儲存桶掛進系統「檔案」App，像 iCloud 雲端硬碟一樣瀏覽、上傳、下載、重新命名，並用任何 App 直接開啟。Pro 功能。",
+          "ja": "R2 バケットをシステムの「ファイル」App に直接マウント。iCloud Drive のように閲覧・アップロード・ダウンロード・名称変更ができ、任意の App で開けます。Pro 機能。",
+          "es-MX": "Monta un bucket R2 directamente en la app Archivos: explora, sube, descarga y renombra como en iCloud Drive, y ábrelo con cualquier app. Función Pro.",
+          "ko": "R2 버킷을 시스템 파일 앱에 바로 마운트하세요. iCloud Drive처럼 탐색·업로드·다운로드·이름 변경이 가능하고 어떤 앱으로든 열 수 있습니다. Pro 기능입니다.",
+          "pt-BR": "Monte um bucket R2 direto no app Arquivos: navegue, envie, baixe e renomeie como no iCloud Drive e abra em qualquer app. Recurso Pro.",
+          "pt-PT": "Monte um bucket R2 diretamente na app Ficheiros: navegue, carregue, descarregue e mude o nome como no iCloud Drive e abra em qualquer app. Funcionalidade Pro.",
+          "de": "Binde einen R2-Bucket direkt in die Dateien-App ein – durchsuchen, hochladen, herunterladen und umbenennen wie in iCloud Drive und in jeder App öffnen. Eine Pro-Funktion.",
+          "fr": "Montez un bucket R2 directement dans l’app Fichiers : parcourez, importez, téléchargez et renommez comme sur iCloud Drive, et ouvrez vos fichiers dans n’importe quelle app. Fonction Pro.",
+          "ar": "ثبّت حاوية R2 مباشرةً داخل تطبيق الملفات — تصفّح وارفع ونزّل وأعد التسمية كما في iCloud Drive، وافتح الملفات بأي تطبيق. ميزة Pro.",
+          "tr": "Bir R2 paketini doğrudan sistemin Dosyalar uygulamasına bağlayın; iCloud Drive gibi gözatın, yükleyin, indirin ve yeniden adlandırın, dosyaları herhangi bir uygulamada açın. Pro özelliği."
+        }
+      },
+      {
+        "icon": "sparkles",
+        "title": {
+          "zh-Hans": "设备端 AI 助手",
+          "en": "On-device AI assistant",
+          "zh-Hant": "裝置端 AI 助手",
+          "zh-HK": "裝置端 AI 助手",
+          "ja": "オンデバイス AI アシスタント",
+          "es-MX": "Asistente de IA en el dispositivo",
+          "ko": "온디바이스 AI 어시스턴트",
+          "pt-BR": "Assistente de IA no dispositivo",
+          "pt-PT": "Assistente de IA no dispositivo",
+          "de": "KI-Assistent auf dem Gerät",
+          "fr": "Assistant IA sur l’appareil",
+          "ar": "مساعد ذكاء اصطناعي على الجهاز",
+          "tr": "Cihaz üzerinde yapay zekâ asistanı"
+        },
+        "detail": {
+          "zh-Hans": "用一句话生成 DNS 记录，或为流量分析生成一句话要点摘要——全部在设备上离线完成，不出设备。需 iOS 26 及支持 Apple 智能的机型，Pro 功能。",
+          "en": "Create a DNS record from a sentence, or get a one-line summary of your traffic analytics — all on-device and offline, nothing leaves your iPhone. Requires iOS 26 and an Apple Intelligence–capable device. A Pro feature.",
+          "zh-Hant": "用一句話生成 DNS 記錄，或為流量分析產生一句話要點摘要——全部在裝置上離線完成，不離開裝置。需 iOS 26 及支援 Apple 智慧的機型，Pro 功能。",
+          "zh-HK": "用一句話生成 DNS 記錄，或為流量分析產生一句話要點摘要——全部在裝置上離線完成，不離開裝置。需 iOS 26 及支援 Apple 智能的機型，Pro 功能。",
+          "ja": "一文から DNS レコードを作成したり、トラフィック分析の要点を一行で要約したり——すべてデバイス上でオフライン処理され、データは外部に出ません。iOS 26 と Apple Intelligence 対応端末が必要です。Pro 機能。",
+          "es-MX": "Crea un registro DNS con una frase u obtén un resumen de una línea de tus analíticas de tráfico, todo en el dispositivo y sin conexión: nada sale de tu iPhone. Requiere iOS 26 y un dispositivo compatible con Apple Intelligence. Función Pro.",
+          "ko": "한 문장으로 DNS 레코드를 만들거나 트래픽 분석을 한 줄로 요약하세요. 모두 기기에서 오프라인으로 처리되어 기기 밖으로 나가지 않습니다. iOS 26과 Apple Intelligence 지원 기기가 필요합니다. Pro 기능입니다.",
+          "pt-BR": "Crie um registro DNS a partir de uma frase ou obtenha um resumo em uma linha das suas análises de tráfego — tudo no dispositivo e off-line, nada sai do seu iPhone. Requer iOS 26 e um dispositivo compatível com Apple Intelligence. Recurso Pro.",
+          "pt-PT": "Crie um registo DNS a partir de uma frase ou obtenha um resumo numa linha das suas análises de tráfego — tudo no dispositivo e offline, nada sai do seu iPhone. Requer iOS 26 e um dispositivo compatível com Apple Intelligence. Funcionalidade Pro.",
+          "de": "Erstelle einen DNS-Eintrag aus einem Satz oder erhalte eine einzeilige Zusammenfassung deiner Traffic-Analyse – alles auf dem Gerät und offline, nichts verlässt dein iPhone. Erfordert iOS 26 und ein Apple-Intelligence-fähiges Gerät. Eine Pro-Funktion.",
+          "fr": "Créez un enregistrement DNS à partir d’une phrase ou obtenez un résumé en une ligne de vos statistiques de trafic — le tout sur l’appareil et hors ligne, rien ne quitte votre iPhone. Nécessite iOS 26 et un appareil compatible Apple Intelligence. Fonction Pro.",
+          "ar": "أنشئ سجل DNS من جملة واحدة، أو احصل على ملخّص من سطر واحد لتحليلات حركة المرور — كل ذلك على الجهاز وبدون اتصال، ولا شيء يغادر هاتفك. يتطلب iOS 26 وجهازًا يدعم Apple Intelligence. ميزة Pro.",
+          "tr": "Tek bir cümleden DNS kaydı oluşturun veya trafik analizinizin tek satırlık özetini alın; hepsi cihazda ve çevrimdışı, hiçbir şey iPhone’unuzdan çıkmaz. iOS 26 ve Apple Intelligence destekli bir cihaz gerektirir. Pro özelliği."
+        }
+      },
+      {
+        "icon": "globe.americas",
+        "title": {
+          "zh-Hans": "全球流量地图",
+          "en": "Global traffic map",
+          "zh-Hant": "全球流量地圖",
+          "zh-HK": "全球流量地圖",
+          "ja": "グローバルトラフィックマップ",
+          "es-MX": "Mapa de tráfico global",
+          "ko": "글로벌 트래픽 지도",
+          "pt-BR": "Mapa de tráfego global",
+          "pt-PT": "Mapa de tráfego global",
+          "de": "Globale Traffic-Karte",
+          "fr": "Carte du trafic mondial",
+          "ar": "خريطة حركة المرور العالمية",
+          "tr": "Küresel trafik haritası"
+        },
+        "detail": {
+          "zh-Hans": "在世界地图上按国家/地区查看请求量与威胁分布，一眼看清流量来自哪里。Pro 功能。",
+          "en": "See where your traffic comes from at a glance — requests and threats plotted by country on a world map. A Pro feature.",
+          "zh-Hant": "在世界地圖上依國家/地區檢視請求量與威脅分佈，一眼看清流量來自哪裡。Pro 功能。",
+          "zh-HK": "在世界地圖上按國家/地區查看請求量與威脅分佈，一眼看清流量來自哪裡。Pro 功能。",
+          "ja": "リクエストと脅威を世界地図上に国・地域別でプロット。トラフィックの発信元がひと目で分かります。Pro 機能。",
+          "es-MX": "Ve de un vistazo de dónde viene tu tráfico: solicitudes y amenazas trazadas por país en un mapa mundial. Función Pro.",
+          "ko": "트래픽이 어디에서 오는지 한눈에 확인하세요. 요청과 위협을 세계 지도에 국가별로 표시합니다. Pro 기능입니다.",
+          "pt-BR": "Veja de onde vem o seu tráfego num relance: solicitações e ameaças mapeadas por país em um mapa-múndi. Recurso Pro.",
+          "pt-PT": "Veja de onde vem o seu tráfego num ápice: pedidos e ameaças mapeados por país num mapa-múndi. Funcionalidade Pro.",
+          "de": "Sieh auf einen Blick, woher dein Traffic kommt – Anfragen und Bedrohungen nach Land auf einer Weltkarte. Eine Pro-Funktion.",
+          "fr": "Voyez d’où vient votre trafic en un coup d’œil : requêtes et menaces représentées par pays sur une carte du monde. Fonction Pro.",
+          "ar": "اعرف مصدر حركة المرور لديك بلمحة — الطلبات والتهديدات موزّعة حسب الدولة على خريطة العالم. ميزة Pro.",
+          "tr": "Trafiğinizin nereden geldiğini bir bakışta görün; istekler ve tehditler dünya haritasında ülkelere göre işaretlenir. Pro özelliği."
+        }
+      },
+      {
+        "icon": "wrench.and.screwdriver",
+        "title": {
+          "zh-Hans": "体验与稳定性改进",
+          "en": "Experience & stability improvements",
+          "zh-Hant": "體驗與穩定性改進",
+          "zh-HK": "體驗與穩定性改進",
+          "ja": "体験と安定性の改善",
+          "es-MX": "Mejoras de experiencia y estabilidad",
+          "ko": "사용 경험 및 안정성 개선",
+          "pt-BR": "Melhorias de experiência e estabilidade",
+          "pt-PT": "Melhorias de experiência e estabilidade",
+          "de": "Verbesserungen bei Erlebnis und Stabilität",
+          "fr": "Améliorations de l’expérience et de la stabilité",
+          "ar": "تحسينات في التجربة والاستقرار",
+          "tr": "Deneyim ve kararlılık iyileştirmeleri"
+        },
+        "detail": {
+          "zh-Hans": "新增「减少动画」开关让界面更跟手，优化多账号切换的稳定性，并在后台预热数据，切回前台更快看到最新内容。",
+          "en": "A new “Reduce Animations” toggle makes the interface feel snappier, multi-account switching is more reliable, and data is pre-warmed in the background so you see the latest content faster when you return.",
+          "zh-Hant": "新增「減少動畫」開關讓介面更跟手，優化多帳戶切換的穩定性，並在背景預先載入資料，切回前景更快看到最新內容。",
+          "zh-HK": "新增「減少動畫」開關讓介面更跟手，優化多帳戶切換的穩定性，並在背景預先載入資料，切回前景更快看到最新內容。",
+          "ja": "新しい「アニメーションを減らす」スイッチで操作がより軽快に。複数アカウントの切り替えも安定し、バックグラウンドでデータを事前読み込みするため、戻ったときに最新の内容をすばやく表示します。",
+          "es-MX": "Un nuevo interruptor «Reducir animaciones» hace la interfaz más ágil, el cambio entre varias cuentas es más estable y los datos se precargan en segundo plano para que veas el contenido más reciente más rápido al volver.",
+          "ko": "새로운 ‘애니메이션 줄이기’ 스위치로 화면이 더 빠릿해지고, 여러 계정 전환이 더 안정적이며, 백그라운드에서 데이터를 미리 불러와 돌아왔을 때 최신 내용을 더 빨리 볼 수 있습니다.",
+          "pt-BR": "Um novo botão “Reduzir animações” deixa a interface mais ágil, a troca entre várias contas ficou mais estável e os dados são pré-carregados em segundo plano para você ver o conteúdo mais recente mais rápido ao voltar.",
+          "pt-PT": "Um novo botão “Reduzir animações” torna a interface mais ágil, a mudança entre várias contas ficou mais estável e os dados são pré-carregados em segundo plano para ver o conteúdo mais recente mais depressa ao regressar.",
+          "de": "Ein neuer Schalter „Animationen reduzieren“ lässt die Oberfläche flüssiger wirken, der Wechsel zwischen mehreren Konten ist zuverlässiger, und Daten werden im Hintergrund vorgeladen, damit du nach der Rückkehr schneller die neuesten Inhalte siehst.",
+          "fr": "Un nouveau réglage « Réduire les animations » rend l’interface plus réactive, le passage d’un compte à l’autre est plus fiable, et les données sont préchargées en arrière-plan pour afficher le contenu le plus récent plus vite à votre retour.",
+          "ar": "مفتاح جديد «تقليل الحركات» يجعل الواجهة أكثر سلاسة، والتبديل بين الحسابات المتعددة أصبح أكثر ثباتًا، ويتم تحميل البيانات مسبقًا في الخلفية لتشاهد أحدث المحتوى بسرعة عند عودتك.",
+          "tr": "Yeni “Animasyonları Azalt” anahtarı arayüzü daha akıcı yapar, çoklu hesap geçişi daha kararlı hale gelir ve veriler arka planda önceden yüklenir; böylece geri döndüğünüzde en güncel içeriği daha hızlı görürsünüz."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.5.1",
     "date": "2026.06.26",
     "channel": "App Store",

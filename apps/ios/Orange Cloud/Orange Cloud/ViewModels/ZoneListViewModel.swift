@@ -30,7 +30,9 @@ final class ZoneListViewModel {
     }
 
     /// 从 API 刷新并 upsert 进缓存（共享逻辑见 CacheSync，含 Widget 快照与 Spotlight 索引）
-    func refresh(accountId: String, accountName: String = "", context: ModelContext) async {
+    func refresh(accountId: String, accountName: String = "", context: ModelContext, force: Bool = false) async {
+        // 非强制（首屏/切 Tab）且缓存仍新鲜：用缓存（@Query 已渲染），不重发请求
+        if !force, CachePolicy.zonesFresh(accountId: accountId, context: context) { return }
         // 已有加载在跑：等它结束即可，不另起重复请求
         if let loadTask {
             await loadTask.value

@@ -76,8 +76,8 @@ final class WatchBridge: NSObject {
             WatchTokenStore.save(accessToken: token, expiresAt: expiresAt, sessionId: sessionId)
             hasToken = expiresAt.timeIntervalSinceNow > 60
         }
-        WidgetDataStore.saveZones(payload.zones)
-        if let usage = payload.usage { WidgetDataStore.saveUsage(usage) }
+        WidgetDataStore.saveAllZones(payload.zones)
+        if let usage = payload.usage { WidgetDataStore.saveUsage(usage, accountId: "") }
         let unavailable = payload.accountAnalyticsUnavailable ?? false
         WidgetDataStore.saveAccountAnalyticsAvailable(!unavailable)
         accountAnalyticsUnavailable = unavailable
@@ -112,7 +112,7 @@ final class WatchBridge: NSObject {
         if let index = zones.firstIndex(where: { $0.id == id }) {
             zones[index] = fresh
         }
-        WidgetDataStore.saveZones(zones)
+        WidgetDataStore.saveAllZones(zones)
         WidgetCenter.shared.reloadAllTimelines()
     }
 }

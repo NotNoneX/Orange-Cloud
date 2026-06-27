@@ -10,6 +10,28 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "1.6.0", items: [
+            WhatsNewItem(
+                icon:   "folder.badge.gearshape",
+                title:  String(localized: "在「文件」App 中打开 R2", table: "WhatsNew"),
+                detail: String(localized: "把 R2 存储桶挂进系统「文件」App，像 iCloud 云盘一样浏览、上传、下载、重命名，并用任意 App 直接打开。Pro 功能。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "sparkles",
+                title:  String(localized: "设备端 AI 助手", table: "WhatsNew"),
+                detail: String(localized: "用一句话生成 DNS 记录，或为流量分析生成一句话要点摘要——全部在设备上离线完成，不出设备。需 iOS 26 及支持 Apple 智能的机型，Pro 功能。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "globe.americas",
+                title:  String(localized: "全球流量地图", table: "WhatsNew"),
+                detail: String(localized: "在世界地图上按国家/地区查看请求量与威胁分布，一眼看清流量来自哪里。Pro 功能。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "wrench.and.screwdriver",
+                title:  String(localized: "体验与稳定性改进", table: "WhatsNew"),
+                detail: String(localized: "新增「减少动画」开关让界面更跟手，优化多账号切换的稳定性，并在后台预热数据，切回前台更快看到最新内容。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.5.0", items: [
             WhatsNewItem(
                 icon:   "bolt.horizontal",

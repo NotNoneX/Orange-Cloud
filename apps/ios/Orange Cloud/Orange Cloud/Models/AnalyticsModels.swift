@@ -178,6 +178,42 @@ nonisolated enum AnalyticsQueries {
         }
         """
     }
+
+    /// 24h：按国家/地区聚合（小时桶各自携带 countryMap，Swift 端合并）
+    static func zoneCountryHourly(limit: Int) -> String {
+        """
+        query ($zoneTag: string!, $since: Time!, $until: Time!) {
+          viewer {
+            zones(filter: { zoneTag: $zoneTag }) {
+              httpRequests1hGroups(
+                limit: \(limit),
+                filter: { datetime_geq: $since, datetime_lt: $until }
+              ) {
+                sum { countryMap { clientCountryName requests threats bytes } }
+              }
+            }
+          }
+        }
+        """
+    }
+
+    /// 7d/30d：按国家/地区聚合（天桶各自携带 countryMap）
+    static func zoneCountryDaily(limit: Int) -> String {
+        """
+        query ($zoneTag: string!, $since: Date!, $until: Date!) {
+          viewer {
+            zones(filter: { zoneTag: $zoneTag }) {
+              httpRequests1dGroups(
+                limit: \(limit),
+                filter: { date_geq: $since, date_leq: $until }
+              ) {
+                sum { countryMap { clientCountryName requests threats bytes } }
+              }
+            }
+          }
+        }
+        """
+    }
 }
 
 nonisolated struct ZoneAnalyticsVariables: Codable, Sendable {
@@ -238,6 +274,15 @@ nonisolated struct AnalyticsSum: Codable, Sendable {
     let pageViews:      Int?
     let cachedRequests: Int?
     let cachedBytes:    Int?
+    let countryMap:     [CountryMapEntry]?    // 仅按国家聚合的查询请求该字段
+}
+
+/// GraphQL `sum.countryMap` 单条目（clientCountryName 是 ISO-3166-1 alpha-2）
+nonisolated struct CountryMapEntry: Codable, Sendable {
+    let clientCountryName: String?
+    let requests:          Int?
+    let threats:           Int?
+    let bytes:             Int?
 }
 
 nonisolated struct AnalyticsUniq: Codable, Sendable {
@@ -256,4 +301,21 @@ nonisolated struct TrafficDataPoint: Identifiable, Sendable {
     let cachedRequests: Int
 
     var id: Date { date }
+}
+
+// MARK: - 按国家/地区聚合（全球流量地图）
+
+/// 窗口内单个国家/地区的流量聚合（countryMap 跨时间桶合并后的结果）
+nonisolated struct CountryTraffic: Identifiable, Sendable {
+    let countryCode: String    // ISO-3166-1 alpha-2，如 "US"、"CN"
+    let requests:    Int
+    let threats:     Int
+    let bytes:       Int
+
+    var id: String { countryCode }
+
+    /// 本地化国家/地区名；无法解析（如 Tor 的 "T1"、未知码）时回退原始码
+    var displayName: String {
+        Locale.current.localizedString(forRegionCode: countryCode) ?? countryCode
+    }
 }

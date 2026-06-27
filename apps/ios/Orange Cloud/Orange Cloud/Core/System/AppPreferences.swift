@@ -38,6 +38,12 @@ nonisolated enum AppAppearance: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
+/// 动效偏好，存 UserDefaults（reduceAppAnimations）。开启后由根视图统一禁用过渡/隐式动画，
+/// 让页面切换与界面变化更跟手（独立于系统「减弱动态效果」，由用户在设置里手动控制）。
+nonisolated enum AppMotion {
+    static let storageKey = "reduceAppAnimations"
+}
+
 /// 界面语言，存 UserDefaults（appLanguage）。rawValue 即语言代码（system 除外）。
 nonisolated enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
 

@@ -52,8 +52,8 @@ nonisolated private func sampleService(for id: String) -> WidgetUsageService {
 }
 
 /// 严格按所选服务匹配——没有数据就返回 nil（显示同步提示），不再静默回退到首个服务
-nonisolated private func resolveService(_ id: String) -> WidgetUsageService? {
-    WidgetDataStore.loadUsage()?.services.first { $0.id == id }
+nonisolated private func resolveService(_ id: String, accountId: String?) -> WidgetUsageService? {
+    WidgetDataStore.loadUsage(accountId: accountId)?.services.first { $0.id == id }
 }
 
 nonisolated struct UsageWidgetProvider: AppIntentTimelineProvider {
@@ -64,18 +64,24 @@ nonisolated struct UsageWidgetProvider: AppIntentTimelineProvider {
 
     func snapshot(for configuration: UsageConfigIntent, in context: Context) async -> UsageWidgetEntry {
         usageLog.info("snapshot: config.service=\(configuration.serviceId, privacy: .public)")
+        let accountId = configuration.account?.id ?? WidgetSnapshot.currentAccountId()
         return UsageWidgetEntry(
             date: .now,
-            service: resolveService(configuration.serviceId) ?? sampleService(for: configuration.serviceId),
+            service: resolveService(configuration.serviceId, accountId: accountId) ?? sampleService(for: configuration.serviceId),
             missingName: nil
         )
     }
 
     func timeline(for configuration: UsageConfigIntent, in context: Context) async -> Timeline<UsageWidgetEntry> {
         usageLog.info("timeline: config.service=\(configuration.serviceId, privacy: .public)")
+        let accountId = configuration.account?.id ?? WidgetSnapshot.currentAccountId()
         // 自取数优先（共享钥匙串 token 直查所选服务），失败回退 App 写入的快照
-        let fresh = await UsageFetcher.freshService(configuration.serviceId)
-        let service = fresh ?? resolveService(configuration.serviceId)
+        let fresh = await UsageFetcher.freshService(
+            configuration.serviceId,
+            accountId: configuration.account?.id,
+            sessionId: configuration.account?.sessionId
+        )
+        let service = fresh ?? resolveService(configuration.serviceId, accountId: accountId)
         let unavailable = service == nil && !WidgetDataStore.loadAccountAnalyticsAvailable()
         usageLog.info("timeline: fresh=\(fresh?.id ?? "nil", privacy: .public) resolved=\(service?.id ?? "nil", privacy: .public) unavailable=\(unavailable, privacy: .public)")
         let entry = UsageWidgetEntry(

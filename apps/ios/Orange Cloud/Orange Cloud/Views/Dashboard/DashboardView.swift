@@ -205,6 +205,7 @@ struct DashboardView: View {
         guard auth.hasScope("analytics.read") else { return }
         await viewModel.loadTraffic(
             zones: displayZones.map { (id: $0.id, name: $0.name) },
+            accountId: session.selectedAccount?.id,
             force: force
         )
     }
@@ -298,7 +299,7 @@ struct DashboardView: View {
             services.append(WidgetUsageService(id: "kv", name: "KV", rows: rows))
         }
 
-        WidgetDataStore.saveUsage(WidgetUsageData(services: services, updatedAt: Date()))
+        WidgetDataStore.saveUsage(WidgetUsageData(services: services, updatedAt: Date()), accountId: currentAccountId)
         WidgetCenter.shared.reloadTimelines(ofKind: "UsageWidget")
     }
 

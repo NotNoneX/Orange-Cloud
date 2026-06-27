@@ -13,7 +13,8 @@ import SwiftUI
 nonisolated enum ProFeature: String, Identifiable, Sendable {
     case multiAccount, storage, workerTail, waf, tunnel, analyticsRange, snippets
     case workerSecrets, workerTriggers, workerRoutes, cacheRules, pages, loadBalancing, bulkRedirects
-    case auditLog, emailRouting, rateLimit, zeroTrust
+    case auditLog, emailRouting, rateLimit, zeroTrust, trafficMap
+    case aiInsights, aiDNS, filesApp
 
     var id: String { rawValue }
 
@@ -37,6 +38,10 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .emailRouting:   String(localized: "Email Routing 需要 Pro")
         case .rateLimit:      String(localized: "限速规则需要 Pro")
         case .zeroTrust:      String(localized: "Zero Trust 需要 Pro")
+        case .trafficMap:     String(localized: "全球流量地图需要 Pro")
+        case .aiInsights:     String(localized: "智能流量摘要需要 Pro")
+        case .aiDNS:          String(localized: "AI 添加记录需要 Pro")
+        case .filesApp:       String(localized: "在『文件』中访问需要 Pro")
         }
     }
 
@@ -60,6 +65,10 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .emailRouting:   String(localized: "管理域名的邮件路由规则与目的地址属于 Orange Cloud Pro。")
         case .rateLimit:      String(localized: "查看与管理限速规则属于 Orange Cloud Pro。")
         case .zeroTrust:      String(localized: "查看 Zero Trust Access 应用与 Gateway 策略属于 Orange Cloud Pro。")
+        case .trafficMap:     String(localized: "按国家/地区在世界地图上查看请求与威胁的地理分布属于 Orange Cloud Pro。")
+        case .aiInsights:     String(localized: "用设备端 AI 一句话总结本期流量的增长、异常与主要来源（离线、免费、不出设备）属于 Orange Cloud Pro。")
+        case .aiDNS:          String(localized: "用自然语言一句话生成 DNS 记录（如「给 blog 加个指向 1.2.3.4 的 A 记录」），设备端离线属于 Orange Cloud Pro。")
+        case .filesApp:       String(localized: "把 R2 存储桶挂进系统『文件』App，像 iCloud 云盘一样浏览、读写、用任意 App 打开，属于 Orange Cloud Pro。")
         }
     }
 
@@ -83,6 +92,10 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .emailRouting:   "envelope"
         case .rateLimit:      "gauge.with.dots.needle.bottom.50percent"
         case .zeroTrust:      "lock.shield"
+        case .trafficMap:     "globe.americas"
+        case .aiInsights:     "sparkles"
+        case .aiDNS:          "sparkles"
+        case .filesApp:       "folder.badge.gearshape"
         }
     }
 }

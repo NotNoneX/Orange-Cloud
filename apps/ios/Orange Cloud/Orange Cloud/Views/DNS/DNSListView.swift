@@ -162,7 +162,7 @@ struct DNSListView: View {
         }
         .scrollContentBackground(.hidden)
         .refreshable {
-            await viewModel.refresh(context: modelContext)
+            await viewModel.refresh(context: modelContext, force: true)
         }
     }
 }

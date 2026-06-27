@@ -8,6 +8,7 @@
 
 import Foundation
 import BackgroundTasks
+import SwiftData
 
 @MainActor
 enum BackgroundRefresh {
@@ -26,6 +27,8 @@ enum BackgroundRefresh {
                 AppLog.background.notice("BGAppRefresh fired, loggedIn=\(authManager.isLoggedIn)")
                 if authManager.isLoggedIn {
                     _ = try? await authManager.refreshAccessToken()
+                    // 预热当前账号域名快照，让用户切回前台 / 小组件刷新时直接见到最新数据
+                    await prewarmWidgetSnapshot(authManager: authManager)
                     // 顺带做通知检测（Zone 状态变化 / Worker 错误）
                     await AppNotifications.runBackgroundChecks(authManager: authManager)
                 }
@@ -37,6 +40,27 @@ enum BackgroundRefresh {
                 work.cancel()
                 refreshTask.setTaskCompleted(success: false)
             }
+        }
+    }
+
+    /// 后台预热：刷新「当前账号」（Widget 默认展示的账号）的 Zone 列表进缓存 + Widget 总览快照，
+    /// 并维护 Widget 账号目录。只刷一个账号，控制后台时间预算；任何失败静默忽略。
+    private static func prewarmWidgetSnapshot(authManager: AuthManager) async {
+        let client = CFAPIClient(authManager: authManager)
+        guard let accounts = try? await AccountService(client: client).listAccounts(),
+              !accounts.isEmpty else { return }
+        // 优先预热 App Group 记录的当前账号，否则取第一个
+        let targetId = WidgetSnapshot.currentAccountId()
+        let account = accounts.first { $0.id == targetId } ?? accounts[0]
+        guard let zones = try? await ZoneService(client: client).listZones(accountId: account.id) else { return }
+        let context = ModelContext(CacheContainer.shared)
+        try? CacheSync.syncZones(zones, accountId: account.id, accountName: account.name, context: context)
+        // Widget 账号目录（选择账号 picker 数据源）后台也保持最新
+        if let sessionId = authManager.currentSessionId {
+            WidgetDataStore.mergeAccounts(
+                accounts.map { WidgetAccount(id: $0.id, name: $0.name, sessionId: sessionId.uuidString) },
+                sessionId: sessionId.uuidString
+            )
         }
     }
 

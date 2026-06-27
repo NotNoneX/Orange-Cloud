@@ -23,7 +23,12 @@ nonisolated enum SharedAuth {
     static func currentValidAccessToken() -> String? {
         guard let defaults = UserDefaults(suiteName: WidgetSnapshot.appGroupID),
               let sessionId = defaults.string(forKey: "currentSessionId") else { return nil }
+        return validAccessToken(sessionId: sessionId)
+    }
 
+    /// 指定身份的有效 access_token（Widget 固定某账号时取其所属身份的 token）；
+    /// 不存在或已过期（含 60s 余量）返回 nil。只读，绝不刷新。
+    static func validAccessToken(sessionId: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String:              kSecClassGenericPassword,
             kSecAttrService as String:        service,

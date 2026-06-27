@@ -83,6 +83,11 @@ final class DashboardViewModel {
         force: Bool = false
     ) async {
         guard force || assetsLoadedForAccount != accountId else { return }
+        // 冷启动若持久缓存仍在有效期内，直接用缓存（@Query 已即时渲染），不重新拉网络
+        if !force, assetsLoadedForAccount == nil, CachePolicy.zonesFresh(accountId: accountId, context: context) {
+            assetsLoadedForAccount = accountId
+            return
+        }
         // 已有加载在跑：等它结束即可，不另起重复请求（手势取消波及不到这个独立 Task）
         if let assetsTask {
             await assetsTask.value
@@ -286,7 +291,7 @@ final class DashboardViewModel {
 
     /// 拉取各 Zone 的 24h 流量。zone 集合没变化时跳过（Tab 切换不重复请求）。
     /// 成功后写入 Widget 快照（按域名的指标卡数据源）。
-    func loadTraffic(zones: [(id: String, name: String)], force: Bool = false) async {
+    func loadTraffic(zones: [(id: String, name: String)], accountId: String? = nil, force: Bool = false) async {
         let idSet = Set(zones.map(\.id))
         guard !idSet.isEmpty else { return }
         guard force || idSet != loadedZoneIds else { return }
@@ -296,26 +301,26 @@ final class DashboardViewModel {
         }
         let task = Task { [weak self] in
             guard let self else { return }
-            await self.performLoadTraffic(zones: zones, idSet: idSet)
+            await self.performLoadTraffic(zones: zones, idSet: idSet, accountId: accountId)
         }
         trafficTask = task
         defer { trafficTask = nil }
         await task.value
     }
 
-    private func performLoadTraffic(zones: [(id: String, name: String)], idSet: Set<String>) async {
+    private func performLoadTraffic(zones: [(id: String, name: String)], idSet: Set<String>, accountId: String?) async {
         isLoading = true
         // 流量数据加载失败不打扰 Dashboard（卡片自动隐藏图表）
         if let traffic = try? await analyticsService.trafficByZone24h(zoneIds: zones.map(\.id)) {
             trafficByZone = traffic
             loadedZoneIds = idSet
-            writeZoneWidgetSnapshots(zones: zones, traffic: traffic)
+            writeZoneWidgetSnapshots(zones: zones, traffic: traffic, accountId: accountId)
         }
         isLoading = false
     }
 
-    /// Zone 指标快照 → App Group（Widget 数据源）
-    private func writeZoneWidgetSnapshots(zones: [(id: String, name: String)], traffic: [String: ZoneTrafficBundle]) {
+    /// Zone 指标快照 → App Group（Widget 数据源），按账号分桶
+    private func writeZoneWidgetSnapshots(zones: [(id: String, name: String)], traffic: [String: ZoneTrafficBundle], accountId: String?) {
         let metrics: [WidgetZoneMetrics] = zones.compactMap { zone in
             guard let bundle = traffic[zone.id], !bundle.points.isEmpty else { return nil }
             let points = bundle.points
@@ -336,13 +341,15 @@ final class DashboardViewModel {
                 requestsTrend: trend,
                 requestsSeries: points.map(\.requests),
                 bytesSeries: points.map(\.bytes),
-                updatedAt: Date()
+                updatedAt: Date(),
+                accountId: accountId
             )
         }
         guard !metrics.isEmpty else { return }
-        WidgetDataStore.saveZones(metrics)
+        WidgetDataStore.saveZones(metrics, accountId: accountId ?? "")
         WidgetCenter.shared.reloadTimelines(ofKind: "ZoneStatWidget")
         WidgetCenter.shared.reloadTimelines(ofKind: "ZoneChartWidget")
+        WidgetCenter.shared.reloadTimelines(ofKind: "ZoneStatusWidget")
         // 数据刷新后把最新快照推给 Apple Watch
         WatchSessionManager.shared.pushCurrentState()
     }

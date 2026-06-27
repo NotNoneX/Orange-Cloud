@@ -30,7 +30,9 @@ final class DNSListViewModel {
         self.zoneName = zoneName
     }
 
-    func refresh(context: ModelContext) async {
+    func refresh(context: ModelContext, force: Bool = false) async {
+        // 非强制（首屏/切 Tab）且缓存仍新鲜：用缓存（@Query 已渲染），不重发请求
+        if !force, CachePolicy.dnsFresh(zoneId: zoneId, context: context) { return }
         // 复用进行中的加载，并把网络加载放进独立 Task：下拉手势 / searchable 取消
         // .refreshable 子任务时不波及加载，避免 URLError.cancelled 误报为加载失败
         if let loadTask {
@@ -81,6 +83,26 @@ final class DNSListViewModel {
         } catch {
             self.error = error.localizedDescription
             return false
+        }
+    }
+
+    // MARK: - 设备端 AI 生成（自然语言 → 结构化 → 记录草稿）
+
+    var isGenerating = false
+    var generationError: String?
+
+    /// 用自然语言生成一条记录草稿；失败时写入 generationError 并返回 nil。
+    func generateRecord(from naturalLanguage: String, locale: Locale = .current) async -> GeneratedDNSRecord? {
+        let trimmed = naturalLanguage.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, !isGenerating else { return nil }
+        isGenerating = true
+        generationError = nil
+        defer { isGenerating = false }
+        do {
+            return try await DNSAssistant.generateRecord(from: trimmed, locale: locale)
+        } catch {
+            generationError = error.localizedDescription
+            return nil
         }
     }
 
